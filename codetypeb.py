@@ -1,5 +1,4 @@
 
-
 import http.client
 import streamlit as st
 import pandas as pd
@@ -25,13 +24,11 @@ st.title("Mirae Asset m.Stock - NIFTY Option Chain")
 # API SETTINGS
 # ============================================================
 
-BASE_URL = "https://api.mstock.trade"
-
 # IMPORTANT:
 # Do NOT hard-code your real API key in this file.
 # Enter it through Streamlit sidebar or secrets.
 api_key = st.sidebar.text_input(
-    "m.Stock Type A API Key",
+    "m.Stock  API Key",
     type="password"
 )
 
@@ -53,27 +50,27 @@ if st.sidebar.button("Generate OTP"):
         st.error("Enter API Key, Username and Password.")
     else:
 
-        login_url = f"{BASE_URL}/openapi/typea/connect/login"
+        conn = http.client.HTTPSConnection('api.mstock.trade')
 
         headers = {
-            "X-Mirae-Version": "1",
-            "Content-Type": "application/x-www-form-urlencoded"
+            'X-Mirae-Version': '1',
+            'Content-Type': 'application/json',
         }
 
-        payload = {
-            "username": username,
-            "password": password
+        json_data = {
+            'clientcode': username,
+            'password': password,
+            'totp': '',
+            'state': '',
         }
 
         try:
-
-            response = requests.post(
-                login_url,
-                headers=headers,
-                data=payload,
-                timeout=15
+            conn.request('POST',
+            '/openapi/typeb/connect/login',
+            json.dumps(json_data),timeout=15,
+            headers
             )
-
+            response = conn.getresponse()
             st.write("Login HTTP Status:", response.status_code)
 
             try:
