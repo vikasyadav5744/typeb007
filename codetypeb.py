@@ -46,8 +46,8 @@ password = st.sidebar.text_input(
 
 if st.sidebar.button("Generate OTP"):
 
-    if not api_key or not username or not password:
-        st.error("Enter API Key, Username and Password.")
+    if not username or not password:
+        st.error("Enter Username and Password.")
     else:
 
         conn = http.client.HTTPSConnection('api.mstock.trade')
