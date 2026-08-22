@@ -68,7 +68,7 @@ if st.sidebar.button("Generate OTP"):
             conn.request('POST',
             '/openapi/typeb/connect/login',
             json.dumps(json_data),timeout=15,
-            headers)
+            headers=headers)
             response = conn.getresponse()
             st.write("Login HTTP Status:", response.status_code)
 
