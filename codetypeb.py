@@ -70,7 +70,7 @@ if st.sidebar.button("Generate OTP"):
             json.dumps(json_data),
             headers=headers)
             response = conn.getresponse()
-            st.write("Login HTTP Status:", response.status)
+            st.write("Login HTTP Status:", response)
 
             try:
                 st.json(response.json())
