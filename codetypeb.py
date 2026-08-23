@@ -84,7 +84,7 @@ if st.sidebar.button("Generate OTP", key='key2'):
 # ============================================================
 # GENERATE Session with OTP
 # ============================================================
-refreshToken = st.sidebar.text_input("Enter OTP",type="password", key= 'key3')
+refreshToken = st.sidebar.text_input("refreshToken",type="password", key= 'key3')
 
 otp = st.sidebar.text_input(
     "Enter OTP",
