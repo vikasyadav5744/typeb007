@@ -84,10 +84,10 @@ key_jwt = st.sidebar.checkbox("Key &jwtToken", key='jwt1')
 if key_jwt==True:
     api_key = st.sidebar.text_input(
     "m.Stock  API Key",
-    type="password", key='key1')
+    type="password", key='api_key')
     
     jwtToken = st.sidebar.text_input("jwtToken Token", 
-    key='key6', type="password")
+    key='jwtToken', type="password")
 
 
 #================================================
@@ -98,7 +98,7 @@ if sessionlog1==True:
     refreshToken = st.sidebar.text_input(
     "refreshToken",
     type="password", 
-    key= 'key3')
+    key= 'refreshToken')
     
     otp = st.sidebar.text_input("Enter OTP",
     type="password", key= 'key4')
