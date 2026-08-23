@@ -30,7 +30,6 @@ st.title("Mirae Asset m.Stock - NIFTY Option Chain- Type B")
 api_key = st.sidebar.text_input(
     "m.Stock  API Key",
     type="password", key='key1')
-)
 
 # ============================================================
 # LOGIN
