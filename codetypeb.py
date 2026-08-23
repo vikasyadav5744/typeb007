@@ -20,6 +20,16 @@ st.set_page_config(
 
 st.title("Mirae Asset m.Stock - NIFTY Option Chain- Type B")
 # ============================================================
+
+
+api_key = st.sidebar.text_input(
+    "m.Stock  API Key",
+    type="password", key='key1')
+
+
+jwtToken = st.sidebar.text_input("jwtToken Token", 
+    key='key6', type="password")
+#--------------------------------------------------
 # LOGIN
 # ============================================================
 conn = http.client.HTTPSConnection('api.mstock.trade')
@@ -77,10 +87,6 @@ if st.sidebar.button("Generate OTP", key='key2', help='note jwt & refresh token'
 # ============================================================
 
 sessionlog1=st.sidebar.checkbox("session login criteria", key="session1")
-api_key = st.sidebar.text_input(
-    "m.Stock  API Key",
-    type="password", key='key1')
-
 
 if sessionlog1==True:
 
@@ -130,7 +136,7 @@ if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken a
 #jwtTOKEN
 # ============================================================
 # Optional manual access token
-jwtToken = st.sidebar.text_input("jwtToken Token", key='key6', type="password")
+
 #==========================================================
 
 # ============================================================
