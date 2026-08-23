@@ -111,7 +111,7 @@ if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken a
             st.write("HTTPS reason:", response1.reason)
             result1 = response1.json()
             st.json(result1)
-        except exceptions as e:
+        except Exception as e:
             st.write("Error:", e)
         else:
             st.write("nice job")
