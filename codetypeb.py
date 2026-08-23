@@ -18,7 +18,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("Mirae Asset m.Stock - NIFTY Option Chain")
+st.title("Mirae Asset m.Stock - NIFTY Option Chain- Type B")
 
 # ============================================================
 # API SETTINGS
