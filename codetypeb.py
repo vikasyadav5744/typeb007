@@ -19,6 +19,17 @@ st.set_page_config(
 
 st.title("Mirae Asset m.Stock - NIFTY Option Chain- Type B")
 # ============================================================
+#sessdion state
+
+if "api_key" not in st.session_state:
+    st.session_state.api_key=""
+
+if "refreshToken" not in st.session_state:
+    st.session_state.refreshToken=""
+
+if "jwtToken" not in st.session_state:
+    st.session_state.jwtToken=""
+
 #--------------------------------------------------
 # LOGIN
 # ============================================================
@@ -140,14 +151,6 @@ if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken a
 
 # ============================================================
 #jwtTOKEN
-
-    #sessdion state
-
-if api_key not in st.session_state:
-    st.session_state.api_key=""
-
-if refreshToken not in st.session_state:
-    st.session_state.refreshToken=""
 # ============================================================
 # Optional manual access token
 
@@ -188,8 +191,6 @@ if st.sidebar.button("ChainMaster", key='key7', help="jwt &api_ke"):
         finally:
             conn.close()
 
-if jwtToken not in st.session_state:
-    st.session_state.jwtToken=""
 #≠==============================================
                 #common header for fetching datat
 #≠==============================================
