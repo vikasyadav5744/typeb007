@@ -238,6 +238,6 @@ if show_criteria==True:
             conn.close()
     # -------------------Intraday data code end here -----------------
 
-
+st.write('jwttiken',st.session_state.jwtToken)
 
     
