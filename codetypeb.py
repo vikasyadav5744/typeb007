@@ -77,12 +77,13 @@ if st.sidebar.button("Generate OTP", key='key2', help='note jwt & refresh token'
 # ============================================================
 
 sessionlog1=st.sidebar.checkbox("session login criteria", key="session1")
-                               
-if sessionlog1==True:
-    api_key = st.sidebar.text_input(
+api_key = st.sidebar.text_input(
     "m.Stock  API Key",
     type="password", key='key1')
-    
+
+
+if sessionlog1==True:
+
     refreshToken = st.sidebar.text_input(
     "refreshToken",
     type="password", 
