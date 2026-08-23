@@ -143,7 +143,7 @@ if st.sidebar.button("ChainMaster", key='key7', help="jwt &api_ke"):
         try:
             headers4 = {
             'X-Mirae-Version': '1',
-            'Authorization': jwtToken,
+            'Authorization': f'Bearer {jwtToken}',
             'X-PrivateKey': api_key,
             'Content-Type': 'application/json',
             }
@@ -162,10 +162,51 @@ if st.sidebar.button("ChainMaster", key='key7', help="jwt &api_ke"):
             st.write("Error:", e)
         finally:
             conn.close()
-    
 
+#≠==============================================
+                #common header for fetching datat
+#≠==============================================
 
+headers_common = {
+    'X-Mirae-Version': '1',
+    'Authorization': f'Bearer {jwtToken}',
+    'X-PrivateKey': api_key,
+    'Content-Type': 'application/json',
+}
+# -------------------Intraday data-----------------
+
+show_criteria =st.sidebar.button("show intraday criteria", key='key8')
+
+if show_criteria==True:
+    interval= st.sidebar.selectbox("Interval", key='key9', options=['minute', '3minute', '5minute', '10minute', '15minute', '30minute', '60minute', 'day'],index =0)
+    exchange= st.sidebar.selectbox("Exchange", key='key10', options=[1, 'NSE',2,'NFO'],index =0)
+    symboltoken=st.sidebar.number_input("SymbolToken", key='key11', value=26000)
     
+    json_data_common = {
+    'exchange': exchange,
+    'symboltoken': symboltoken,
+    'interval': interval,
+    }
+    if st.sidebar.button("Get Intraday Data", key='key8'):
+        try:
+            conn.request(
+            'POST',
+            '/openapi/typeb/instruments/intraday',
+            json.dumps(json_data_common),
+            headers_common
+            )
+            response3 = conn.getresponse()
+            st.write("HTTP Status:", response3.status)
+            st.write("Reason:", response3.reason)
+            result3 = response3.read().decode("utf-8")
+            st.write("API Response:")
+            st.write(result3)
+        except Exception as e:
+            st.write("Error:", e)
+        finally:
+            conn.close()
+    # -------------------Intraday data code end here -----------------
+
 
 
     
