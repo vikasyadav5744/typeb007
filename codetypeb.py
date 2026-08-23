@@ -19,18 +19,6 @@ st.set_page_config(
 )
 
 st.title("Mirae Asset m.Stock - NIFTY Option Chain- Type B")
-
-# ============================================================
-# API SETTINGS
-# ============================================================
-
-# IMPORTANT:
-# Do NOT hard-code your real API key in this file.
-# Enter it through Streamlit sidebar or secrets.
-api_key = st.sidebar.text_input(
-    "m.Stock  API Key",
-    type="password", key='key1')
-
 # ============================================================
 # LOGIN
 # ============================================================
@@ -43,7 +31,7 @@ password = st.sidebar.text_input(
     type="password"
 )
 
-if st.sidebar.button("Generate OTP", key='key2'):
+if st.sidebar.button("Generate OTP", key='key2', help='note jwt & refresh token'):
 
     if not username or not password:
         st.error("Enter Username and Password.")
@@ -84,13 +72,19 @@ if st.sidebar.button("Generate OTP", key='key2'):
 # ============================================================
 # GENERATE Session with OTP
 # ============================================================
-refreshToken = st.sidebar.text_input("refreshToken",type="password", key= 'key3')
+
+api_key = st.sidebar.text_input(
+    "m.Stock  API Key",
+    type="password", key='key1')
+
+refreshToken = st.sidebar.text_input(
+    "refreshToken",
+    type="password", 
+    key= 'key3')
 
 otp = st.sidebar.text_input(
     "Enter OTP",
-    type="password", key= 'key4'
-)
-
+    type="password", key= 'key4')
 
 if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken and otp"):
 
