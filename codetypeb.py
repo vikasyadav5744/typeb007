@@ -127,31 +127,32 @@ jwtToken = st.sidebar.text_input("jwtToken Token", key='key6', type="password")
 # ============================================================
 # OPTION CHAIN MASTER
 # ============================================================
-chainmaster =st.sidebar.button("ChainMaster", key='key7', help="jwt &api_ke")
-if chainmaster:
-    try:
-        headers4 = {
-        'X-Mirae-Version': '1',
-        'Authorization': jwtToken,
-        'X-PrivateKey': api_key,
-        'Content-Type': 'application/json',
-        }
-        conn.request(
-        "GET",
-        "/openapi/typeb/getoptionchainmaster/2",
-        headers=headers4
-        )
-        response2 = conn.getresponse()
-        st.write("HTTP Status:", response2.status)
-        st.write("Reason:", response2.reason)
-        result2 = response2.read().decode("utf-8")
-        st.write("API Response:")
-        st.write(result2)
-    
-    except Exception as e:
-        st.write("Error:", e)
-    finally:
-        conn.close()
+
+if st.sidebar.button("ChainMaster", key='key7', help="jwt &api_ke"):
+    if not api_key or not jwtToken or not otp:
+        st.error("Enter API Key and jwtToken.")
+        try:
+            headers4 = {
+            'X-Mirae-Version': '1',
+            'Authorization': jwtToken,
+            'X-PrivateKey': api_key,
+            'Content-Type': 'application/json',
+            }
+            conn.request(
+            "GET",
+            "/openapi/typeb/getoptionchainmaster/2",
+            headers=headers4
+            )
+            response2 = conn.getresponse()
+            st.write("HTTP Status:", response2.status)
+            st.write("Reason:", response2.reason)
+            result2 = response2.read().decode("utf-8")
+            st.write("API Response:")
+            st.write(result2)
+        except Exception as e:
+            st.write("Error:", e)
+        finally:
+            conn.close()
     
 
 
