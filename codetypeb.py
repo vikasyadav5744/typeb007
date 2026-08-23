@@ -207,7 +207,7 @@ show_criteria =st.sidebar.checkbox("show intraday criteria", key='key8')
 
 if show_criteria==True:
     interval= st.sidebar.selectbox("Interval", key='key9', options=['minute', '3minute', '5minute', '10minute', '15minute', '30minute', '60minute', 'day'],index =0)
-    exchange= st.sidebar.selectbox("Exchange", key='key10', options=[1, 'NSE',2,'NFO'],index =0)
+    exchange= st.sidebar.selectbox("Exchange", key='key10', options=[1, 'NSE',2,'NFO'],index =2)
     symboltoken=st.sidebar.number_input("SymbolToken", key='key11', value=26000)
     
     json_data_common = {
@@ -238,6 +238,36 @@ if show_criteria==True:
             conn.close()
     # -------------------Intraday data code end here -----------------
 
-st.write('jwttiken',st.session_state.jwtToken)
+st.write('jwttoken:(-_-)',st.session_state.jwtToken)
 
+
+#===== call put data-----------
+
+call_criteria =st.sidebar.checkbox("show call/ put criteia", key='key13')
+
+if call_criteria==True:
+    expiry= st.sidebar.selectbox("Expiry", key='key14', options=[1429972200],index =0)
+    exchange1= st.sidebar.selectbox("Exchange", key='key15', options=[1,2],index =1)
+    symboltoken1=st.sidebar.number_input("SymbolToken", key='key16', value=26000)
+    
+    calldata=st.sidebar.button("Get Call Data", key='key17')
+    if calldata==True:
+        try:
+            conn.request(
+            'GET',
+            f'/openapi/typeb/GetOptionChain/{exchange1}/{expiry}/{symboltoken1}',
+            headers_common
+            )
+            response4 = conn.getresponse()
+            st.write("HTTP Status:", response4.status)
+            st.write("Reason:", response4.reason)
+            result4 = response4.read().decode("utf-8")
+            st.write("API Response:")
+            st.write(result4)
+            st.session_state.api_key = api_key
+            st.session_state.jwtToken= jwtToken
+        except Exception as e:
+            st.write("Error:", e)
+        finally:
+            conn.close()
     
