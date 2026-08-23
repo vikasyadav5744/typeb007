@@ -85,8 +85,9 @@ if st.sidebar.button("Generate OTP"):
 
 
 # ============================================================
-# GENERATE ACCESS TOKEN
+# GENERATE jwtTOKEN
 # ============================================================
+
 otp = st.sidebar.text_input(
     "Enter OTP",
     type="password"
@@ -130,21 +131,13 @@ if st.sidebar.button("Generate Access Token"):
             st.write("Access token generated successfully")
 
 # ============================================================
-# ACCESS TOKEN
+#jwtTOKEN
 # ============================================================
 
 # Optional manual access token
 
-access_token = st.sidebar.text_input("Access Token (optional)",type="password")
-
-# ============================================================
-# COMMON HEADERS
-# ============================================================
-
-headers1 = {
-    "X-Mirae-Version": "1",
-    "Authorization": f"token {api_key}:{access_token}"
-}
+jwtToken = st.sidebar.text_input("jwtToken Token",type="password")
+==========================================================
 
 # ============================================================
 # OPTION CHAIN MASTER
@@ -154,12 +147,14 @@ if chainmaster:
     try:
         conn = http.client.HTTPSConnection("api.mstock.trade", timeout=10)
         headers4 = {
-        "X-Mirae-Version": "1",
-        "Authorization": f"token {api_key}:{access_token}"
+        'X-Mirae-Version': '1',
+        'Authorization': 'Bearer jwtToken',
+        'X-PrivateKey': 'api_key',
+        'Content-Type': 'application/json',
         }
         conn.request(
         "GET",
-        "/openapi/typea/getoptionchainmaster/2",
+        "/openapi/typeb/getoptionchainmaster/2",
         headers=headers4
         )
         response = conn.getresponse()
