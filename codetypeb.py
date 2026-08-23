@@ -107,7 +107,7 @@ if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken a
             json.dumps(json_data1), headers1)
             response1 = conn.getresponse()
 
-            st.write("Session HTTP Status:", response1.status_code)
+            st.write("Session HTTP Status:", response1.status)
             st.write("HTTPS reason:", response1.reason)
             result1 = response1.json()
             st.json(result1)
