@@ -33,6 +33,9 @@ jwtToken = st.sidebar.text_input("jwtToken Token",
 # LOGIN
 # ============================================================
 conn = http.client.HTTPSConnection('api.mstock.trade')
+
+log12 = st.sidebar.checkbox("login inputs", key='log1')
+
 st.sidebar.header("Login")
 
 username = st.sidebar.text_input("Username")
