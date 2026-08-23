@@ -33,8 +33,10 @@ password = st.sidebar.text_input(
 
 if st.sidebar.button("Generate OTP", key='key2', help='note jwt & refresh token'):
 
-    if not username or not password:
-        st.error("Enter Username and Password.")
+    if not username:
+        st.error("Enter Username")
+    elif not password:
+        st.error("Enter Password.")
     else:
     
         headers = {
