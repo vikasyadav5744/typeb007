@@ -55,7 +55,8 @@ if st.sidebar.button("Generate OTP", key='key2', help='note jwt & refresh token'
             json.dumps(json_data),
             headers=headers)
             response = conn.getresponse()
-            st.write("Login HTTP Status:", response)
+            st.write("Login HTTP Status:", response.status_code)
+            st.write("HTTPS reason:", response.reason)
 
             try:
                 st.json(response.json())
@@ -88,7 +89,7 @@ otp = st.sidebar.text_input(
 
 if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken and otp"):
 
-    if not api_key or not otp:
+    if not api_key or not refreshToken or not otp:
         st.error("Enter API Key and OTP.")
     else:
         headers1 = {
@@ -103,10 +104,11 @@ if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken a
         try:
             conn.request('POST',
             '/openapi/typeb/session/token',
-            json.dumps(json_data), headers)
+            json.dumps(json_data), headers1)
             response1 = conn.getresponse()
 
             st.write("Session HTTP Status:", response1.status_code)
+            st.write("HTTPS reason:", response1.reason)
             result1 = response1.json()
             st.json(result1)
         except exceptions as e:
@@ -128,11 +130,10 @@ jwtToken = st.sidebar.text_input("jwtToken Token", key='key6', type="password")
 chainmaster =st.sidebar.button("ChainMaster", key='key7')
 if chainmaster:
     try:
-        conn = http.client.HTTPSConnection("api.mstock.trade", timeout=10)
         headers4 = {
         'X-Mirae-Version': '1',
-        'Authorization': 'Bearer jwtToken',
-        'X-PrivateKey': 'api_key',
+        'Authorization': jwtToken,
+        'X-PrivateKey': api_key,
         'Content-Type': 'application/json',
         }
         conn.request(
@@ -140,12 +141,12 @@ if chainmaster:
         "/openapi/typeb/getoptionchainmaster/2",
         headers=headers4
         )
-        response = conn.getresponse()
-        st.write("HTTP Status:", response.status)
-        st.write("Reason:", response.reason)
-        result = response.read().decode("utf-8")
+        response2 = conn.getresponse()
+        st.write("HTTP Status:", response2.status)
+        st.write("Reason:", response2.reason)
+        result2 = response2.read().decode("utf-8")
         st.write("API Response:")
-        st.write(result)
+        st.write(result2)
     
     except Exception as e:
         st.write("Error:", e)
