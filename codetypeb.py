@@ -127,7 +127,7 @@ jwtToken = st.sidebar.text_input("jwtToken Token", key='key6', type="password")
 # ============================================================
 # OPTION CHAIN MASTER
 # ============================================================
-chainmaster =st.sidebar.button("ChainMaster", key='key7')
+chainmaster =st.sidebar.button("ChainMaster", key='key7', help="jwt &api_ke")
 if chainmaster:
     try:
         headers4 = {
