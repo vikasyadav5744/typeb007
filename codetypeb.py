@@ -187,7 +187,7 @@ if show_criteria==True:
     'symboltoken': symboltoken,
     'interval': interval,
     }
-    intraday=st.sidebar.button("Get Intraday Data", key='key9')
+    intraday=st.sidebar.button("Get Intraday Data", key='key12')
     if intraday==True:
         try:
             conn.request(
