@@ -29,13 +29,13 @@ st.title("Mirae Asset m.Stock - NIFTY Option Chain- Type B")
 # Enter it through Streamlit sidebar or secrets.
 api_key = st.sidebar.text_input(
     "m.Stock  API Key",
-    type="password"
+    type="password", key='key1')
 )
 
 # ============================================================
 # LOGIN
 # ============================================================
-
+conn = http.client.HTTPSConnection('api.mstock.trade')
 st.sidebar.header("Login")
 
 username = st.sidebar.text_input("Username")
@@ -44,14 +44,12 @@ password = st.sidebar.text_input(
     type="password"
 )
 
-if st.sidebar.button("Generate OTP"):
+if st.sidebar.button("Generate OTP", key='key2'):
 
     if not username or not password:
         st.error("Enter Username and Password.")
     else:
-
-        conn = http.client.HTTPSConnection('api.mstock.trade')
-
+    
         headers = {
             'X-Mirae-Version': '1',
             'Content-Type': 'application/json',
@@ -85,64 +83,56 @@ if st.sidebar.button("Generate OTP"):
 
 
 # ============================================================
-# GENERATE jwtTOKEN
+# GENERATE Session with OTP
 # ============================================================
+refreshToken = st.sidebar.text_input("Enter OTP",type="password", key= 'key3')
 
 otp = st.sidebar.text_input(
     "Enter OTP",
-    type="password"
+    type="password", key= 'key4'
 )
 
-if st.sidebar.button("Generate Access Token"):
+
+if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken and otp"):
 
     if not api_key or not otp:
         st.error("Enter API Key and OTP.")
     else:
-
-        session_url = f"{BASE_URL}/openapi/typea/session/token"
-
-        headers = {
-            "X-Mirae-Version": "1",
-            "Content-Type": "application/x-www-form-urlencoded"
+        headers1 = {
+        'X-Mirae-Version': '1',
+        'X-PrivateKey': api_key,
+        'Content-Type': 'application/json',
         }
-
-        payload = {
-            "api_key": api_key,
-            "request_token": otp,
-            "checksum": "L"
+        json_data1 = {
+        'refreshToken': refreshToken,
+        'otp': otp
         }
-
         try:
+            conn.request('POST',
+            '/openapi/typeb/session/token',
+            json.dumps(json_data), headers)
+            response1 = conn.getresponse()
 
-            response = requests.post(
-                session_url,
-                headers=headers,
-                data=payload,
-                timeout=15
-            )
-
-            st.write("Session HTTP Status:", response.status_code)
-            result = response.json()
-            st.json(result)
+            st.write("Session HTTP Status:", response1.status_code)
+            result1 = response1.json()
+            st.json(result1)
         except exceptions as e:
             st.write("Error:", e)
         else:
             st.write("nice job")
-            st.write("Access token generated successfully")
+            st.write("Session generated successfully")
 
 # ============================================================
 #jwtTOKEN
 # ============================================================
-
 # Optional manual access token
-
-jwtToken = st.sidebar.text_input("jwtToken Token",type="password")
-==========================================================
+jwtToken = st.sidebar.text_input("jwtToken Token", key='key6', type="password")
+#==========================================================
 
 # ============================================================
 # OPTION CHAIN MASTER
 # ============================================================
-chainmaster =st.sidebar.button("ChainMaster", key='key1')
+chainmaster =st.sidebar.button("ChainMaster", key='key7')
 if chainmaster:
     try:
         conn = http.client.HTTPSConnection("api.mstock.trade", timeout=10)
