@@ -76,7 +76,7 @@ if st.sidebar.button("Generate OTP", key='key2', help='note jwt & refresh token'
 # GENERATE Session with OTP
 # ============================================================
 
-sessionlog1=st.sidebar.checkbox("session login criteria", key='session1")
+sessionlog1=st.sidebar.checkbox("session login criteria", key="session1")
                                
 if sessionlog1==True:
     api_key = st.sidebar.text_input(
