@@ -146,9 +146,6 @@ if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken a
 if api_key not in st.session_state:
     st.session_state.api_key=""
 
-if jwtToken not in st.session_state:
-    st.session_state.jwtToken=""
-
 if refreshToken not in st.session_state:
     st.session_state.refreshToken=""
 # ============================================================
@@ -191,6 +188,8 @@ if st.sidebar.button("ChainMaster", key='key7', help="jwt &api_ke"):
         finally:
             conn.close()
 
+if jwtToken not in st.session_state:
+    st.session_state.jwtToken=""
 #≠==============================================
                 #common header for fetching datat
 #≠==============================================
