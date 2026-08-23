@@ -139,6 +139,7 @@ if st.sidebar.button("ChainMaster", key='key7', help="jwt &api_ke"):
         st.error("Enter API Key.")
     elif not jwtToken:
         st.error("Enter jwtToken.")
+    else:
         try:
             headers4 = {
             'X-Mirae-Version': '1',
