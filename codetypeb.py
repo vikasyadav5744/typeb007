@@ -91,8 +91,12 @@ otp = st.sidebar.text_input(
 
 if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken and otp"):
 
-    if not api_key or not refreshToken or not otp:
-        st.error("Enter API Key and OTP.")
+    if not api_key:
+        st.error("Enter API Key.")
+    elif not refreshToken:
+        st.error("Enter refreshToken.")
+    elif not otp:
+        st.error("Enter OTP.")
     else:
         headers1 = {
         'X-Mirae-Version': '1',
@@ -131,8 +135,10 @@ jwtToken = st.sidebar.text_input("jwtToken Token", key='key6', type="password")
 # ============================================================
 
 if st.sidebar.button("ChainMaster", key='key7', help="jwt &api_ke"):
-    if not api_key or not jwtToken or not otp:
-        st.error("Enter API Key and jwtToken.")
+    if not api_key:
+        st.error("Enter API Key.")
+    elif not jwtToken:
+        st.error("Enter jwtToken.")
         try:
             headers4 = {
             'X-Mirae-Version': '1',
