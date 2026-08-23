@@ -104,7 +104,7 @@ if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken a
         try:
             conn.request('POST',
             '/openapi/typeb/session/token',
-            json.dumps(json_data), headers1)
+            json.dumps(json_data1), headers1)
             response1 = conn.getresponse()
 
             st.write("Session HTTP Status:", response1.status_code)
