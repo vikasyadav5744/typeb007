@@ -55,7 +55,7 @@ if st.sidebar.button("Generate OTP", key='key2', help='note jwt & refresh token'
             json.dumps(json_data),
             headers=headers)
             response = conn.getresponse()
-            st.write("Login HTTP Status:", response.status_code)
+            st.write("Login HTTP Status:", response.status)
             st.write("HTTPS reason:", response.reason)
 
             try:
