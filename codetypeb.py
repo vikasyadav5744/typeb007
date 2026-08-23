@@ -175,7 +175,7 @@ headers_common = {
 }
 # -------------------Intraday data-----------------
 
-show_criteria =st.sidebar.button("show intraday criteria", key='key8')
+show_criteria =st.sidebar.checkbox("show intraday criteria", key='key8')
 
 if show_criteria==True:
     interval= st.sidebar.selectbox("Interval", key='key9', options=['minute', '3minute', '5minute', '10minute', '15minute', '30minute', '60minute', 'day'],index =0)
