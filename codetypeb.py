@@ -61,7 +61,7 @@ if st.sidebar.button("Generate OTP", key='key2', help='note jwt & refresh token'
             try:
                 st.json(response.json())
             except:
-                st.write(response.read().decode("utf-8")
+                st.write(response.read().decode("utf-8"))
 
             if response.ok:
                 st.success("OTP sent to your registered mobile.")
