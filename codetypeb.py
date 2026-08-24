@@ -141,8 +141,6 @@ if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken a
             st.write("HTTPS reason:", response1.reason)
             result1 = response1.json()
             st.json(result1)
-            st.session_state.api_key = api_key
-            st.session_state.refreshToken= refreshToken
         except Exception as e:
             st.write("Error:", e)
         else:
@@ -184,8 +182,6 @@ if st.sidebar.button("ChainMaster", key='key7', help="jwt &api_ke"):
             result2 = response2.read().decode("utf-8")
             st.write("API Response:")
             st.write(result2)
-            st.session_state.api_key = api_key
-            st.session_state.jwtToken= jwtToken
         except Exception as e:
             st.write("Error:", e)
         finally:
