@@ -7,6 +7,10 @@ from datetime import datetime, timedelta
 # PAGE CONFIG
 # ============================================================
 
+my_ip = requests.get("https://api.ipify.org", timeout=10).text
+st.write("Current public IP:", my_ip)
+
+
 st.set_page_config(
     page_title="Mirae NIFTY Option Chain",
     layout="wide"
