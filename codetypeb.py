@@ -1,269 +1,590 @@
-import http.client
 import streamlit as st
 import pandas as pd
 import requests
-import json
-from datetime import datetime, timezone, date
-
-my_ip = requests.get("https://api.ipify.org", timeout=10).text
-st.write("Current public IP:", my_ip)
+from datetime import datetime, timedelta
 
 # ============================================================
 # PAGE CONFIG
 # ============================================================
 
 st.set_page_config(
-    page_title="m.Stock NIFTY Option Chain",
+    page_title="Mirae NIFTY Option Chain",
     layout="wide"
 )
 
-st.title("Mirae Asset m.Stock - NIFTY Option Chain- Type B")
+st.title("📊 Mirae Asset m.Stock - NIFTY Option Chain")
+
+
 # ============================================================
-#sessdion state
-
-if "api_key" not in st.session_state:
-    st.session_state.api_key=""
-
-if "refreshToken" not in st.session_state:
-    st.session_state.refreshToken=""
-
-if "jwtToken" not in st.session_state:
-    st.session_state.jwtToken=""
-
-#--------------------------------------------------
-# LOGIN
+# API INPUTS
 # ============================================================
-conn = http.client.HTTPSConnection('api.mstock.trade')
 
-log12 = st.sidebar.checkbox("login inputs", key='log1')
-
-st.sidebar.header("Login")
-
-username = st.sidebar.text_input("Username")
-password = st.sidebar.text_input(
-    "Password",
+api_key = st.text_input(
+    "Mirae API Key",
     type="password"
 )
 
-if st.sidebar.button("Generate OTP", key='key2', help='note jwt & refresh token'):
+access_token = st.text_input(
+    "Access Token",
+    type="password"
+)
 
-    if not username:
-        st.error("Enter Username")
-    elif not password:
-        st.error("Enter Password.")
-    else:
-    
-        headers = {
-            'X-Mirae-Version': '1',
-            'Content-Type': 'application/json',
-        }
 
-        json_data = {
-            'clientcode': username,
-            'password': password,
-            'totp': '',
-            'state': '',
-        }
+# ============================================================
+# SETTINGS
+# ============================================================
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    interval = st.selectbox(
+        "Candle Interval",
+        [
+            "minute",
+            "3minute",
+            "5minute",
+            "10minute",
+            "15minute",
+            "30minute",
+            "60minute"
+        ]
+    )
+
+with col2:
+    strikes_each_side = st.selectbox(
+        "Strikes around ATM",
+        [5, 10, 15, 20],
+        index=1
+    )
+
+with col3:
+    refresh = st.button(
+        "🔄 Refresh Option Chain"
+    )
+
+
+# ============================================================
+# HEADERS
+# ============================================================
+
+def get_headers():
+
+    return {
+        "X-Mirae-Version": "1",
+        "Authorization": f"token {api_key}:{access_token}"
+    }
+
+
+# ============================================================
+# GET OPTION CHAIN
+# ============================================================
+
+def get_option_chain():
+
+    url = (
+        "https://api.mstock.trade/openapi/typea/"
+        "instruments/quote/optionchain"
+    )
+
+    params = {
+        "i": "NSE:NIFTY"
+    }
+
+    response = requests.get(
+        url,
+        headers=get_headers(),
+        params=params,
+        timeout=15
+    )
+
+    response.raise_for_status()
+
+    return response.json()
+
+
+# ============================================================
+# PARSE CALL / PUT
+# ============================================================
+
+def parse_options(option_list, option_type):
+
+    rows = []
+
+    for item in option_list:
 
         try:
-            conn.request('POST',
-            '/openapi/typeb/connect/login',
-            json.dumps(json_data),
-            headers=headers)
-            response = conn.getresponse()
-            st.write("Login HTTP Status:", response.status)
-            st.write("HTTPS reason:", response.reason)
+
+            values = item.split(",")
+
+            if len(values) < 4:
+                continue
+
+            token = int(values[0])
+            strike = int(values[1]) / 100
+            oi = int(values[2])
+            volume = int(values[3])
+
+            rows.append({
+                "token": token,
+                "strike": strike,
+                "OI": oi,
+                "Volume": volume,
+                "Type": option_type
+            })
+
+        except Exception:
+            continue
+
+    return pd.DataFrame(rows)
+
+
+# ============================================================
+# GET OHLC / CANDLES
+# ============================================================
+
+def get_latest_ohlc(token):
+
+    # Current trading date
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    from_time = f"{today} 09:15:00"
+    to_time = f"{today} 15:30:00"
+
+    url = (
+        f"https://api.mstock.trade/openapi/typea/"
+        f"instruments/historical/NFO/{token}/{interval}"
+    )
+
+    params = {
+        "from": from_time,
+        "to": to_time
+    }
+
+    try:
+
+        response = requests.get(
+            url,
+            headers=get_headers(),
+            params=params,
+            timeout=15
+        )
+
+        response.raise_for_status()
+
+        result = response.json()
+
+        candles = result["data"]["candles"][""]
+
+        if not candles:
+            return {
+                "Open": None,
+                "High": None,
+                "Low": None,
+                "Close": None
+            }
+
+        latest = candles[-1]
+
+        return {
+            "Open": latest[1],
+            "High": latest[2],
+            "Low": latest[3],
+            "Close": latest[4]
+        }
+
+    except Exception:
+
+        return {
+            "Open": None,
+            "High": None,
+            "Low": None,
+            "Close": None
+        }
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+if api_key and access_token:
+
+    try:
+
+        with st.spinner("Getting NIFTY option chain..."):
+
+            result = get_option_chain()
+
+        if result.get("status") != "success":
+
+            st.error("Mirae API returned an error.")
+            st.json(result)
+
+        else:
+
+            data = result["data"]
+
+            # ----------------------------------------------
+            # UNDERLYING
+            # ----------------------------------------------
+
+            spot_text = data.get("spot", "")
+
+            spot = None
 
             try:
-                st.json(response.json())
-            except:
-                st.write(response.read().decode("utf-8"))
-
-            if response.ok:
-                st.success("OTP sent to your registered mobile.")
-
-        except Exception as e:
-            st.error(f"Login error: {e}")
+                spot = float(
+                    spot_text.split(",")[1]
+                )
+            except Exception:
+                pass
 
 
-# ============================================================
-# GENERATE Session with OTP
-# ============================================================
-key_jwt = st.sidebar.checkbox("Key &jwtToken", key='jwt1')
+            # ----------------------------------------------
+            # EXPIRY
+            # ----------------------------------------------
 
-if key_jwt==True:
-    api_key = st.sidebar.text_input(
-    "m.Stock  API Key",
-    type="password", key='api_key')
-    
-    jwtToken = st.sidebar.text_input("jwtToken Token", 
-    key='jwtToken', type="password")
+            expiry = data["contractModel"]["exp"]
 
 
-#================================================
+            # ----------------------------------------------
+            # CALL
+            # ----------------------------------------------
 
-sessionlog1=st.sidebar.checkbox("session login criteria", key="session1")
-
-if sessionlog1==True:
-
-    refreshToken = st.sidebar.text_input(
-    "refreshToken",
-    type="password", 
-    key= 'refreshToken')
-    
-    otp = st.sidebar.text_input("Enter OTP",
-    type="password", key= 'key4')
-
-if st.sidebar.button("Generate Session", key='key5', help="requires freshtoken and otp"):
-    if not api_key:
-        st.error("Enter API Key.")
-    elif not refreshToken:
-        st.error("Enter refreshToken.")
-    elif not otp:
-        st.error("Enter OTP.")
-    else:
-        headers1 = {
-        'X-Mirae-Version': '1',
-        'X-PrivateKey': api_key,
-        'Content-Type': 'application/json',
-        }
-        json_data1 = {
-        'refreshToken': refreshToken,
-        'otp': otp
-        }
-        try:
-            conn.request('POST',
-            '/openapi/typeb/session/token',
-            json.dumps(json_data1), headers1)
-            response1 = conn.getresponse()
-
-            st.write("Session HTTP Status:", response1.status)
-            st.write("HTTPS reason:", response1.reason)
-            result1 = response1.json()
-            st.json(result1)
-        except Exception as e:
-            st.write("Error:", e)
-        else:
-            st.write("nice job")
-            st.write("Session generated successfully")
-
-# ============================================================
-#jwtTOKEN
-# ============================================================
-# Optional manual access token
-
-#==========================================================
-
-# ============================================================
-# OPTION CHAIN MASTER
-# ============================================================
-
-if st.sidebar.button("ChainMaster", key='key7', help="jwt &api_ke"):
-    if not api_key:
-        st.error("Enter API Key.")
-    elif not jwtToken:
-        st.error("Enter jwtToken.")
-    else:
-        try:
-            headers4 = {
-            'X-Mirae-Version': '1',
-            'Authorization': f'Bearer {jwtToken}',
-            'X-PrivateKey': api_key,
-            'Content-Type': 'application/json',
-            }
-            conn.request(
-            "GET",
-            "/openapi/typeb/getoptionchainmaster/2",
-            headers=headers4
+            call_df = parse_options(
+                data.get("call", []),
+                "CE"
             )
-            response2 = conn.getresponse()
-            st.write("HTTP Status:", response2.status)
-            st.write("Reason:", response2.reason)
-            result2 = response2.read().decode("utf-8")
-            st.write("API Response:")
-            st.write(result2)
-        except Exception as e:
-            st.write("Error:", e)
-        finally:
-            conn.close()
 
-#≠==============================================
-                #common header for fetching datat
-#≠==============================================
 
-headers_common = {
-    'X-Mirae-Version': '1',
-    'Authorization': f'Bearer {jwtToken}',
-    'X-PrivateKey': api_key,
-    'Content-Type': 'application/json',
-}
-# -------------------Intraday data-----------------
+            # ----------------------------------------------
+            # PUT
+            # ----------------------------------------------
 
-show_criteria =st.sidebar.checkbox("show intraday criteria", key='key8')
-
-if show_criteria==True:
-    interval= st.sidebar.selectbox("Interval", key='key9', options=['minute', '3minute', '5minute', '10minute', '15minute', '30minute', '60minute', 'day'],index =0)
-    exchange= st.sidebar.selectbox("Exchange", key='key10', options=[1, 'NSE',2,'NFO'],index =2)
-    symboltoken=st.sidebar.number_input("SymbolToken", key='key11', value=26000)
-    
-    json_data_common = {
-    'exchange': exchange,
-    'symboltoken': symboltoken,
-    'interval': interval,
-    }
-    intraday=st.sidebar.button("Get Intraday Data", key='key12')
-    if intraday==True:
-        try:
-            conn.request(
-            'POST',
-            '/openapi/typeb/instruments/intraday',
-            json.dumps(json_data_common),
-            headers_common
+            put_df = parse_options(
+                data.get("put", []),
+                "PE"
             )
-            response3 = conn.getresponse()
-            st.write("HTTP Status:", response3.status)
-            st.write("Reason:", response3.reason)
-            result3 = response3.read().decode("utf-8")
-            st.write("API Response:")
-            st.write(result3)
-            st.session_state.api_key = api_key
-            st.session_state.jwtToken= jwtToken
-        except Exception as e:
-            st.write("Error:", e)
-        finally:
-            conn.close()
-    # -------------------Intraday data code end here -----------------
-
-st.write('jwttoken:(-_-)',st.session_state.jwtToken)
 
 
-#===== call put data-----------
+            # ----------------------------------------------
+            # CHECK DATA
+            # ----------------------------------------------
 
-call_criteria =st.sidebar.checkbox("show call/ put criteia", key='key13')
+            if call_df.empty or put_df.empty:
 
-if call_criteria==True:
-    expiry= st.sidebar.selectbox("Expiry", key='key14', options=[1429972200],index =0)
-    exchange1= st.sidebar.selectbox("Exchange", key='key15', options=[1,2],index =1)
-    symboltoken1=st.sidebar.number_input("SymbolToken", key='key16', value=26000)
-    
-    calldata=st.sidebar.button("Get Call Data", key='key17')
-    if calldata==True:
-        try:
-            conn.request(
-            'GET',
-            f'/openapi/typeb/GetOptionChain/{exchange1}/{expiry}/{symboltoken1}',
-            headers_common
-            )
-            response4 = conn.getresponse()
-            st.write("HTTP Status:", response4.status)
-            st.write("Reason:", response4.reason)
-            result4 = response4.read().decode("utf-8")
-            st.write("API Response:")
-            st.write(result4)
-            st.session_state.api_key = api_key
-            st.session_state.jwtToken= jwtToken
-        except Exception as e:
-            st.write("Error:", e)
-        finally:
-            conn.close()
-    
+                st.error(
+                    "CE or PE data is empty."
+                )
+
+                st.json(result)
+
+            else:
+
+                # ------------------------------------------
+                # FIND ATM
+                # ------------------------------------------
+
+                all_strikes = sorted(
+                    set(call_df["strike"])
+                    |
+                    set(put_df["strike"])
+                )
+
+                if spot is not None:
+
+                    atm = min(
+                        all_strikes,
+                        key=lambda x: abs(x - spot)
+                    )
+
+                else:
+
+                    atm = all_strikes[
+                        len(all_strikes) // 2
+                    ]
+
+
+                # ------------------------------------------
+                # SELECT STRIKES
+                # ------------------------------------------
+
+                atm_index = all_strikes.index(atm)
+
+                start = max(
+                    0,
+                    atm_index - strikes_each_side
+                )
+
+                end = min(
+                    len(all_strikes),
+                    atm_index + strikes_each_side + 1
+                )
+
+                selected_strikes = all_strikes[start:end]
+
+
+                # ------------------------------------------
+                # FILTER
+                # ------------------------------------------
+
+                call_df = call_df[
+                    call_df["strike"].isin(
+                        selected_strikes
+                    )
+                ].copy()
+
+                put_df = put_df[
+                    put_df["strike"].isin(
+                        selected_strikes
+                    )
+                ].copy()
+
+
+                # ==================================================
+                # GET OHLC
+                # ==================================================
+
+                progress = st.progress(0)
+
+                total = len(call_df) + len(put_df)
+
+                counter = 0
+
+
+                # CALL OHLC
+
+                call_ohlc = []
+
+                for token in call_df["token"]:
+
+                    ohlc = get_latest_ohlc(token)
+
+                    call_ohlc.append(ohlc)
+
+                    counter += 1
+
+                    progress.progress(
+                        min(counter / total, 1.0)
+                    )
+
+
+                call_ohlc_df = pd.DataFrame(
+                    call_ohlc,
+                    index=call_df.index
+                )
+
+                call_df = pd.concat(
+                    [call_df, call_ohlc_df],
+                    axis=1
+                )
+
+
+                # PUT OHLC
+
+                put_ohlc = []
+
+                for token in put_df["token"]:
+
+                    ohlc = get_latest_ohlc(token)
+
+                    put_ohlc.append(ohlc)
+
+                    counter += 1
+
+                    progress.progress(
+                        min(counter / total, 1.0)
+                    )
+
+
+                put_ohlc_df = pd.DataFrame(
+                    put_ohlc,
+                    index=put_df.index
+                )
+
+                put_df = pd.concat(
+                    [put_df, put_ohlc_df],
+                    axis=1
+                )
+
+
+                progress.empty()
+
+
+                # ==================================================
+                # RENAME
+                # ==================================================
+
+                call_df = call_df.rename(
+                    columns={
+                        "token": "CE_Token",
+                        "OI": "CE_OI",
+                        "Volume": "CE_Volume",
+                        "Open": "CE_Open",
+                        "High": "CE_High",
+                        "Low": "CE_Low",
+                        "Close": "CE_Close"
+                    }
+                )
+
+                put_df = put_df.rename(
+                    columns={
+                        "token": "PE_Token",
+                        "OI": "PE_OI",
+                        "Volume": "PE_Volume",
+                        "Open": "PE_Open",
+                        "High": "PE_High",
+                        "Low": "PE_Low",
+                        "Close": "PE_Close"
+                    }
+                )
+
+
+                # ==================================================
+                # MERGE CE + PE
+                # ==================================================
+
+                final_df = pd.merge(
+                    call_df.drop(
+                        columns=["Type"]
+                    ),
+                    put_df.drop(
+                        columns=["Type"]
+                    ),
+                    on="strike",
+                    how="outer"
+                )
+
+
+                final_df = final_df.sort_values(
+                    "strike"
+                )
+
+
+                # ==================================================
+                # DISPLAY HEADER
+                # ==================================================
+
+                st.subheader("NIFTY")
+
+                c1, c2, c3 = st.columns(3)
+
+                with c1:
+                    st.metric(
+                        "Spot",
+                        f"{spot:,.2f}"
+                        if spot is not None
+                        else "N/A"
+                    )
+
+                with c2:
+                    st.metric(
+                        "ATM",
+                        f"{atm:,.0f}"
+                    )
+
+                with c3:
+                    st.metric(
+                        "Expiry",
+                        str(expiry)
+                    )
+
+
+                # ==================================================
+                # FORMAT
+                # ==================================================
+
+                display_df = final_df.copy()
+
+                numeric_columns = [
+                    "CE_OI",
+                    "CE_Volume",
+                    "CE_Open",
+                    "CE_High",
+                    "CE_Low",
+                    "CE_Close",
+                    "PE_OI",
+                    "PE_Volume",
+                    "PE_Open",
+                    "PE_High",
+                    "PE_Low",
+                    "PE_Close"
+                ]
+
+                for col in numeric_columns:
+
+                    if col in display_df.columns:
+
+                        display_df[col] = pd.to_numeric(
+                            display_df[col],
+                            errors="coerce"
+                        )
+
+
+                # ==================================================
+                # FINAL DISPLAY ORDER
+                # ==================================================
+
+                display_df = display_df[
+                    [
+                        "CE_OI",
+                        "CE_Volume",
+                        "CE_Open",
+                        "CE_High",
+                        "CE_Low",
+                        "CE_Close",
+                        "strike",
+                        "PE_Open",
+                        "PE_High",
+                        "PE_Low",
+                        "PE_Close",
+                        "PE_Volume",
+                        "PE_OI"
+                    ]
+                ]
+
+
+                display_df = display_df.rename(
+                    columns={
+                        "strike": "Strike"
+                    }
+                )
+
+
+                # ==================================================
+                # DISPLAY
+                # ==================================================
+
+                st.dataframe(
+                    display_df,
+                    use_container_width=True,
+                    hide_index=True
+                )
+
+
+                # ==================================================
+                # DOWNLOAD
+                # ==================================================
+
+                csv = display_df.to_csv(
+                    index=False
+                ).encode("utf-8")
+
+                st.download_button(
+                    "⬇️ Download CSV",
+                    csv,
+                    "nifty_option_chain.csv",
+                    "text/csv"
+                )
+
+
+    except Exception as e:
+
+        st.error(
+            f"Error: {e}"
+        )
+
+else:
+
+    st.info(
+        "Enter your Mirae API Key and Access Token."
+    )
