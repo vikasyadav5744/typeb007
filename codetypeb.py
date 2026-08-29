@@ -87,7 +87,7 @@ def get_option_chain():
 
     url = (
         "https://api.mstock.trade/openapi/typea/"
-        "instruments/quote/optionchain"
+        "instruments/quote/ohlc"
     )
 
     params = {
