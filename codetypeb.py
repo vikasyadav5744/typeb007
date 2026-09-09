@@ -381,7 +381,7 @@ def make_ID(data):
   symbol = data[0]
   token = data[1]
   ID =data[2:]
-  len_ID = len(ID)
+  len_ID = len(ID)-1
   df = pd.DataFrame({"symbol":symbol*len_ID, "token":token*len_ID, "expiry_ID":ID})
   return df
   
