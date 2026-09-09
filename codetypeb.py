@@ -35,11 +35,11 @@ def parse_option_data1(option_data):
       for x in item:
         if isinstance(x, str):
           parts = x.split(",")
-          if len(parts) == 6:
+          if len(parts) >= 3:
             rows.append(parts)
     elif isinstance(item, str):
       parts = item.split(",")
-      if len(parts) == 6:
+      if len(parts) >= 3:
         rows.append(parts)
   return rows
 # ============================================================
@@ -378,7 +378,9 @@ IDdf = pd.DataFrame(merged_ID)
 st.write(IDdf)
 
 future = expiry['data']['FUTIDX']
-st.write(future)
+future_ID = parse_option_data1(future)
+
+st.write(future_ID)
 
 
   
