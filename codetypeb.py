@@ -388,11 +388,11 @@ def make_ID(data):
     tkn = token *len_ID
     df1 = pd.DataFrame({"sym" : sym, "token":tkn, "exp_ID":ID})
     i+=1
-  return df
+  return df                                                                              # not working 
   
 future = expiry['data']['FUTIDX']
 future_ID = parse_option_data1(future)
-future_ID = make_ID(future_ID)
+
 st.write("future_ID", future_ID)
 future_df = future_ID[0][2:]
 
