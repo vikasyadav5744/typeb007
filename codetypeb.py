@@ -301,6 +301,7 @@ if ohlc_criteria:
       st.json(response_ohlc)
     else:
       st.json(response_ohlc.text)
+      
   # ============================================================
 # OPTION CHAIN MASTER  CALL / PUT Data
 # ============================================================
@@ -343,8 +344,7 @@ if call_criteria:
     option_chain =pd.concat([calldf_refined,putdf_refined], axis=1, ignore_index=False)
     st.dataframe(option_chain, column_order=['CE.token','CE.OI','CE.ChngOI','CE.strike','PE.ChngOI','PE.OI','PE.token', 'CE.expiry'])
     st.write(calldf_refined)
-
-    
+   
     exp_list= []
     for item in epoch_list:
       response103=requests.get('https://api.mstock.trade'
@@ -354,6 +354,7 @@ if call_criteria:
         exp1=response103["data"]["contractModel"]["exp"]
         exp_list.append(str(exp1))
         st.write("need to be printed", exp_list)
+        
 #==================================================================================================
                                           # master button
 #===================================================================================================
@@ -365,14 +366,21 @@ list_epoch = list(expiry_ids.values())                       #list of epoch
 epoch_len =len(list_epoch)
 with st.expander (" serial no.7 is 1st-Sep-2026 expiry"):
   st.write(list_epoch)
+
+master_chain = pd.DataFrame(expiry)
+st.write(master_chain)
+  
 #------------------------below calculation is only for getting Nifty symbol token to get Intraday data of individual strikes---------------------
+
 expiry_epoch = st.selectbox("Select Expiry", options = list_epoch, index=7, key='outexp')
 response1 = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{expiry_epoch}/26000", headers=headers3)
 st.write("status", response1.status_code)
 result101 = response1.json()
 expiry101 = result101["data"]["contractModel"]["exp"]
 st.write(expiry101)
+
 #---------------------------dataframe call /put data---------------------------------------------------------------------------- 
+
 strike1_d=st.number_input("select first strike", 21000, 28000, 23500, 50, key='strike1_d')
 strike2_d=st.number_input("select second strike", 21000, 28000, 24500, 50, key='strike2_d')
 call_data_d= result101["data"]["call"]
