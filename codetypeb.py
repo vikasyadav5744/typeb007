@@ -379,17 +379,23 @@ st.write(IDdf)
 
 def make_ID(data):
   for i in data:
+    df = pd.DataFrame()
     symbol = data[i][0]
     token = data[i][1]
-    ID =data[i][2]
-    df = pd.DataFrame({"symbol":symbol, "token":token, "expiry_ID":ID})
+    ID =data[i][2:]
+    len_ID = len(ID)
+    sym = symbol *len_ID
+    tkn = token *len_ID
+    
+    df1 = pd.DataFrame({"sym" = sym, "token":tkn, "exp_ID":ID})
   return df
   
 future = expiry['data']['FUTIDX']
 future_ID = parse_option_data1(future)
 st.write("future_ID item:",future_ID)
 future_df = future_ID[0][2:]
-st.write("PRINRWS:_-", future_df)
+df1 = make_ID(future)
+st.write("PRINRWS:_", df1)
 
 
   
