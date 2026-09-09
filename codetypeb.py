@@ -381,7 +381,7 @@ def make_ID(data):
   symbol = data[0]
   token = data[1]
   ID =data[2:]
-  df = pd.DataFrame({"symbol":symbol, "token":token, "expiry_ID":ID}
+  df = pd.DataFrame({"symbol":symbol, "token":token, "expiry_ID":ID})
   return df
   
 future = expiry['data']['FUTIDX']
