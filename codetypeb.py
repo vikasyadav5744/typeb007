@@ -386,7 +386,7 @@ def make_ID(data):
   return df
   
 future = expiry['data']['FUTIDX']
-future_ID = dict(parse_option_data1(future))
+future_ID = {parse_option_data1(future)}
 st.write(future_ID)
 future_df = make_ID(future_ID)
 st.write(future_df)
