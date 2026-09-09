@@ -368,8 +368,8 @@ with st.expander (" serial no.7 is 1st-Sep-2026 expiry"):
   st.write(list_epoch)
 
 master_chain = pd.DataFrame(expiry)
-dctExp = master_chain['dctExp']
-st.write(dctExp)
+st.write(master_chain)
+
   
 #------------------------below calculation is only for getting Nifty symbol token to get Intraday data of individual strikes---------------------
 
