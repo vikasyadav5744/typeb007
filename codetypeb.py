@@ -377,6 +377,7 @@ IDdf = pd.DataFrame(merged_ID)
 
 
 def make_ID(data):
+  i=0
   for i in data:
     df = pd.DataFrame()
     symbol = data[i][0]
@@ -385,8 +386,8 @@ def make_ID(data):
     len_ID = len(ID)
     sym = symbol *len_ID
     tkn = token *len_ID
-    
     df1 = pd.DataFrame({"sym" : sym, "token":tkn, "exp_ID":ID})
+    i+=1
   return df
   
 future = expiry['data']['FUTIDX']
