@@ -379,8 +379,9 @@ st.write(IDdf)
 
 future = expiry['data']['FUTIDX']
 future_ID = parse_option_data1(future)
+future_df = pd.DataFrame(future_ID)
 
-st.write(future_ID)
+st.write(future_df)
 
 
   
