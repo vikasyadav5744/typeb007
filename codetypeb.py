@@ -378,16 +378,16 @@ IDdf = pd.DataFrame(merged_ID)
 st.write(IDdf)
 
 def make_ID(data):
-  symbol = data[0]
-  token = data[1]
-  ID =data[3]
-  len_ID = len(ID)
-  df = pd.DataFrame({"symbol":symbol, "token":token, "expiry_ID":ID})
+  for i in data:
+    symbol = data[i][0]
+    token = data[i][1]
+    ID =data[i][2]
+    df = pd.DataFrame({"symbol":symbol, "token":token, "expiry_ID":ID})
   return df
   
 future = expiry['data']['FUTIDX']
 future_ID = parse_option_data1(future)
-st.write("future_ID item:",future_ID[3:, 2:])
+st.write("future_ID item:",future_ID)
 future_df = make_ID(future_ID)
 st.write(future_df)
 
