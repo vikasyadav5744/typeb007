@@ -388,8 +388,8 @@ def make_ID(data):
 future = expiry['data']['FUTIDX']
 future_ID = parse_option_data1(future)
 st.write("future_ID item:",future_ID)
-future_df = future_ID[0][0]
-st.write(future_df)
+future_df = future_ID[0][2:]
+st.write("PRINRWS:_-", future_df)
 
 
   
