@@ -377,10 +377,17 @@ merged_ID={"expiry_ID":expiry_ID, "expiry_epoch":expiry_epoch}
 IDdf = pd.DataFrame(merged_ID)
 st.write(IDdf)
 
+def make_ID(data):
+  symbol = data[0]
+  token = data[1]
+  ID =data[2:]
+  df = pd.DataFrame({"symbol":symbol, "token":token, "expiry_ID":ID}
+  return df
+  
 future = expiry['data']['FUTIDX']
 future_ID = parse_option_data1(future)
-future_df = pd.DataFrame(future_ID)
 
+future_df = make_ID(future_ID)
 st.write(future_df)
 
 
