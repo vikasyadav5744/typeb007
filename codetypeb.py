@@ -367,7 +367,7 @@ epoch_len =len(list_epoch)
 with st.expander (" serial no.7 is 1st-Sep-2026 expiry"):
   st.write(list_epoch)
 
-dictn = expiry['data']['dctExp']
+dictn = expiry['data']['dctExp'].keys
 st.write(dictn)
  
 master_chain = pd.DataFrame(expiry)
