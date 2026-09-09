@@ -368,14 +368,13 @@ with st.expander (" serial no.7 is 1st-Sep-2026 expiry"):
   st.write(list_epoch)
 
 master_chain = pd.DataFrame(expiry)
-st.write(master_chain)
 
 expiry_ID = list(expiry['data']['dctExp'].keys())
 expiry_epoch = list(expiry['data']['dctExp'].values())
 merged_ID={"expiry_ID":expiry_ID, "expiry_epoch":expiry_epoch}
 
 IDdf = pd.DataFrame(merged_ID)
-st.write(IDdf)
+
 
 def make_ID(data):
   for i in data:
@@ -392,10 +391,9 @@ def make_ID(data):
   
 future = expiry['data']['FUTIDX']
 future_ID = parse_option_data1(future)
-st.write("future_ID item:",future_ID)
 future_df = future_ID[0][2:]
-df1 = make_ID(future)
-st.write("PRINRWS:_", df1)
+
+
 
 
   
@@ -444,9 +442,6 @@ data12 = response9.text
 data12 = json.loads(data12)
 result01=data12["data"]["candles"]
 result_df01 = pd.DataFrame(result01, columns =['Timestamp', 'Open', 'High', 'Low', 'Close', 'Volume'])
-st.write('intraday:', result_df01)
-
-st.write(ce_token)
 
 def get_option_ind(token, para):
 
