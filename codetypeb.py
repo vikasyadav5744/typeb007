@@ -367,14 +367,19 @@ epoch_len =len(list_epoch)
 with st.expander (" serial no.7 is 1st-Sep-2026 expiry"):
   st.write(list_epoch)
 
+master_chain = pd.DataFrame(expiry)
+st.write(master_chain)
+
 expiry_ID = list(expiry['data']['dctExp'].keys())
 expiry_epoch = list(expiry['data']['dctExp'].values())
 merged_ID={"expiry_ID":expiry_ID, "expiry_epoch":expiry_epoch}
+
 IDdf = pd.DataFrame(merged_ID)
 st.write(IDdf)
- 
-master_chain = pd.DataFrame(expiry)
-st.write(master_chain)
+
+future = expiry['data']['FUTIDX']
+st.write(future)
+
 
   
 #------------------------below calculation is only for getting Nifty symbol token to get Intraday data of individual strikes---------------------
