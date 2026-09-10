@@ -292,8 +292,9 @@ spot2 = json.loads(spot1)
 Time = spot2['data']['candles'][0][0]
 Nifty_Close = round(spot2['data']['candles'][0][3])
 Nifty_round = round(spot2['data']['candles'][0][3], -2)
-Nifty_round_lower = round(spot2['data']['candles'][0][3], -2)- 400
-Nifty_round_upper = round(spot2['data']['candles'][0][3], -2) + 400
+strikes_range= st.number_input("strike range from ATM", value= 300, key='strike_r')
+Nifty_round_lower = round(spot2['data']['candles'][0][3], -2)- strikes_range
+Nifty_round_upper = round(spot2['data']['candles'][0][3], -2) + strikes_range
 
 st.write("Spot Nifty Intraday", Time, Nifty_Close, Nifty_round)
 
@@ -424,7 +425,7 @@ CE_details = get_option_ind(ce_token, "CE")
             
 PE_details = get_option_ind(pe_token, "PE")
 
-CE_details = CE_details.rename({
+CE_details = CE_details.rename(columns={
             'Open':'CE_Open',
             'High':'CE_High',
             'Low':'CE_Low',
@@ -433,7 +434,7 @@ CE_details = CE_details.rename({
             'token':'CE_Token'},
             )
 
-PE_details = PE_details.rename({
+PE_details = PE_details.rename(columns={
             'Open':'PE_Open',
             'High':'PE_High',
             'Low':'PE_Low',
