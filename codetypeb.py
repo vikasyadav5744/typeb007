@@ -403,7 +403,7 @@ spot1 = spot.text
 spot2 = json.loads(spot1)
 Time = spot2['data']['candles'][0][0]
 Nifty_Close = round(spot2['data']['candles'][0][3])
-Nifty_round = round(spot2['data']['candles'][0][3], 2)
+Nifty_round = round(spot2['data']['candles'][0][3], -2)
 
 
 
