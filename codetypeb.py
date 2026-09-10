@@ -279,8 +279,7 @@ for i in list_epoch:
   exp = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{i}/26000", headers=headers3)
   if exp.status_code==200:  
     result101 = exp.json()
-    if exp["data"] != "NULL":
-      st.write(result101)
+    st.write(result101)
   else:
     st.write("Not Found")
 st.write("Expiry Details", month_exp)
