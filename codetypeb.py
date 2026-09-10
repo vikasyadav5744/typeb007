@@ -401,8 +401,9 @@ spot = requests.get(f'{url}/openapi/typea/instruments/intraday/1/26000/minute', 
 st.write("Spot", spot.status_code)
 spot1 = spot.text
 spot2 = json.loads(spot1)
-spot3 = spot2['data']['candles'][0]
-st.write("Spot Nifty Intraday", spot3)
+Time = spot2['data']['candles'][0][0]
+Nifty_Close = spot2['data']['candles'][0][3]
+st.write("Spot Nifty Intraday", Time, Nifty_Close)
 
 
 #---------------------------dataframe call /put data---------------------------------------------------------------------------- 
