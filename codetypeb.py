@@ -397,7 +397,7 @@ expiry101 = result101["data"]["contractModel"]["exp"]
 st.write(expiry101)
 #--------------------------------------------------------get spot price-----------------------------
 
-spot = requests.get(f'{url}/openapi/typea/instruments/intraday/2/26000/minute', headers=headers3)
+spot = requests.get(f'{url}/openapi/typea/instruments/intraday/1/26000/minute', headers=headers3)
 st.write("Spot", spot.status_code)
 spot1 = spot.text
 spot2 = json.loads(spot1)
