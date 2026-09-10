@@ -420,16 +420,18 @@ def get_option_ind(token, para):
             'type'
         ]
     )
-CE_details = get_option_ind(ce_token, "CE").rename({
+CE_details = get_option_ind(ce_token, "CE")
+            
+PE_details = get_option_ind(pe_token, "PE")
+
+CE_details = CE_details..rename({
             'Open':'CE_Open',
             'High':'CE_High',
             'Low':'CE_Low',
             'Close':'CE_Close',
             'Volume':'CE_Volume',
-            'token':'CE_Token'}
+            'token':'CE_Token'},
             )
-            
-PE_details = get_option_ind(pe_token, "PE")
 
 st.write(PE_details)
 st.write(CE_details)
