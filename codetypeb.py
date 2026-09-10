@@ -401,7 +401,7 @@ spot = requests.get(f'{url}/openapi/typea/instruments/intraday/1/26000/minute', 
 st.write("Spot", spot.status_code)
 spot1 = spot.text
 spot2 = json.loads(spot1)
-spot3 = data['candles'][0]
+spot3 = spot2['candles'][0]
 st.write("Spot Nifty Intraday", spot3)
 
 
