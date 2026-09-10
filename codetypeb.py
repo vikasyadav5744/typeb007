@@ -292,7 +292,7 @@ spot2 = json.loads(spot1)
 Time = spot2['data']['candles'][0][0]
 Nifty_Close = round(spot2['data']['candles'][0][3])
 Nifty_round = round(spot2['data']['candles'][0][3], -2)
-strikes_range= st.number_input("strike range from ATM", value= 300, key='strike_r')
+strikes_range= st.number_input("strike range from ATM", value= 200, key='strike_r')
 Nifty_round_lower = round(spot2['data']['candles'][0][3], -2)- strikes_range
 Nifty_round_upper = round(spot2['data']['candles'][0][3], -2) + strikes_range
 
@@ -425,7 +425,10 @@ CE_details = get_option_ind(ce_token, "CE")
             
 PE_details = get_option_ind(pe_token, "PE")
 
-CE_details = CE_details.rename(columns={
+st.write(PE_details)
+st.write(CE_details)
+
+CE_details1 = CE_details.rename(columns={
             'Open':'CE_Open',
             'High':'CE_High',
             'Low':'CE_Low',
@@ -434,7 +437,7 @@ CE_details = CE_details.rename(columns={
             'token':'CE_Token'},
             )
 
-PE_details = PE_details.rename(columns={
+PE_details1 = PE_details.rename(columns={
             'Open':'PE_Open',
             'High':'PE_High',
             'Low':'PE_Low',
@@ -442,5 +445,3 @@ PE_details = PE_details.rename(columns={
             'Volume':'PE_Volume',
             'token':'PE_Token'},
             )
-st.write(PE_details)
-st.write(CE_details)
