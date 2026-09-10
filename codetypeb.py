@@ -244,7 +244,7 @@ if hist_criteria:
 url = 'https://api.mstock.trade'
 response = requests.get(f"{url}/openapi/typea/getoptionchainmaster/2", headers=headers3)
 expiry = response.json()
-st.write(expiry.text)
+st.write(expiry)
 expiry_ids = expiry['data']['dctExp']                       # dictionary of key:value
 list_epoch = list(expiry_ids.values())                       #list of epoch
 epoch_len =len(list_epoch)
