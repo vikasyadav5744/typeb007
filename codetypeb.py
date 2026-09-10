@@ -404,6 +404,8 @@ spot2 = json.loads(spot1)
 Time = spot2['data']['candles'][0][0]
 Nifty_Close = round(spot2['data']['candles'][0][3])
 Nifty_round = round(spot2['data']['candles'][0][3], -2)
+Nifty_round_lower = round(spot2['data']['candles'][0][3], -2)- 800
+Nifty_round_upper = round(spot2['data']['candles'][0][3], -2) + 800
 
 
 
@@ -412,8 +414,8 @@ st.write("Spot Nifty Intraday", Time, Nifty_Close, Nifty_round)
 
 #---------------------------dataframe call /put data---------------------------------------------------------------------------- 
 
-strike1_d=st.number_input("select first strike", 21000, 28000, 23500, 50, key='strike1_d')
-strike2_d=st.number_input("select second strike", 21000, 28000, 24500, 50, key='strike2_d')
+strike1_d=st.number_input("select first strike", 21000, 28000, Nifty_round_lower, 50, key='strike1_d')
+strike2_d=st.number_input("select second strike", 21000, 28000, Nifty_round_upper, 50, key='strike2_d')
 call_data_d= result101["data"]["call"]
 put_data_d= result101["data"]["put"]
 call_rows_d = parse_option_data(call_data_d)
