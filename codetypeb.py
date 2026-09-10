@@ -277,23 +277,13 @@ st.write(list_epoch[0])
 month_exp=[]
 for i in list_epoch:
   exp = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{i}/26000", headers=headers3)
-  if exp.status_code==200 & exp['data'] is not 'NULL':  
+  if exp.status_code==200:  
     result101 = exp.json()
-    st.write(result101)
+    if exp["data"] != "NULL":
+      st.write(result101)
   else:
     st.write("Not Found")
-
 st.write("Expiry Details", month_exp)
-
-
-
-
-
-
-
-
-
-
 
 #--------------------------------------------------------get spot price-----------------------------
 
