@@ -437,6 +437,7 @@ st.dataframe(option_chain_d, column_order=['CE.token','CE.OI','CE.volume','CE.st
 
 ce_token = calldf_refined_d['CE.token']
 pe_token = putdf_refined_d['PE.token']
+st.write("CE_token", list(ce_token), list(pe_token)
 
 #------------------------------------------------getting intraday data------------------------------------------
 
@@ -522,9 +523,9 @@ def get_option_ind(token, para):
             'type'
         ]
     )
-CE_details = get_option_ind(ce_token, "CE")
-PE_details = get_option_ind(pe_token, "PE")
+#CE_details = get_option_ind(ce_token, "CE")
+#PE_details = get_option_ind(pe_token, "PE")
 
-st.dataframe(CE_Details)
+#st.dataframe(CE_Details)
 
-st.dataframe(PE_Details)
+#st.dataframe(PE_Details)
