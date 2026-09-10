@@ -292,8 +292,8 @@ spot2 = json.loads(spot1)
 Time = spot2['data']['candles'][0][0]
 Nifty_Close = round(spot2['data']['candles'][0][3])
 Nifty_round = round(spot2['data']['candles'][0][3], -2)
-Nifty_round_lower = round(spot2['data']['candles'][0][3], -2)- 800
-Nifty_round_upper = round(spot2['data']['candles'][0][3], -2) + 800
+Nifty_round_lower = round(spot2['data']['candles'][0][3], -2)- 400
+Nifty_round_upper = round(spot2['data']['candles'][0][3], -2) + 400
 
 st.write("Spot Nifty Intraday", Time, Nifty_Close, Nifty_round)
 
