@@ -283,8 +283,7 @@ try:
             expiry_month.append(expiry_03)
         else:
           st.write("API error:", expiry_02)
-except Exception as e:
-    st.write("Error:", e)
+
 
 st.write(list_epoch)
 st.write(expiry_month)
