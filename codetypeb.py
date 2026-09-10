@@ -276,7 +276,7 @@ st.write(contract)
 st.write(list_epoch[0])
 month_exp=[]
 for i in list_epoch:
-  exp = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{list_epoch[i]}/26000", headers=headers3)
+  exp = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{i}/26000", headers=headers3)
   if exp.status_code==200:  
     result101 = exp.json()
     exp101 = result101["data"]["contractModel"]["exp"]
