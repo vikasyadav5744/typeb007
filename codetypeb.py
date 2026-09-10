@@ -216,34 +216,8 @@ if Intraday_criteria==True:
       result_df = pd.DataFrame(result202, columns =['Timestamp', 'Open', 'High', 'Low', 'Close', 'Volume'])
       st.write(result_df)
 # ============================================================
-# OPTION CHAIN MASTER Expiry data
-# ============================================================
-conn1 = http.client.HTTPSConnection('api.mstock.trade')
-epoch_list =[1475159400,1477578600,1479911400,1483021800,1490884200,1498746600,1472740200,1473345000,1473949800,1474554600,1514471400,1530196200,1561645800,1577284200,1593095400,1609425000,1624545000]
-chaimaster_criteria =st.sidebar.checkbox("show Expiry Data", key='key12')
-if chaimaster_criteria==True:
-    chainmaster =st.sidebar.button("ChainMaster Expiry Data", key='chainmaster')
-    if chainmaster:
-        try:
-            conn1.request(
-            "GET",
-            "/openapi/typea/getoptionchainmaster/2",
-            headers=headers3
-            )
-            response = conn1.getresponse()
-            st.write("HTTP Status:", response.status)
-            st.write("Reason:", response.reason)
-            result = response.read().decode("utf-8")
-            result = json.loads(result)
-            st.json(result)
-            #st.write(result['data']['OPTIDX'][3])    
-        except Exception as e:
-            st.write("Error:", e)
-        finally:
-            conn.close()
-#======================================================
                     #Historical data 
-#====================================================== 
+#====================================================== ===================
 conn3 = http.client.HTTPSConnection('api.mstock.trade')
 hist_criteria=st.sidebar.checkbox("Historical Data", key='hist_criteria')
 if hist_criteria:
@@ -264,97 +238,6 @@ if hist_criteria:
     result4 = response_hist.read().decode("utf-8")
     data4= json.loads(result4)
     st.json(data4)
-#======================================================
-                    #scrip Master
-#====================================================== 
-conn4 = http.client.HTTPSConnection('api.mstock.trade')
-script_criteria=st.sidebar.checkbox("Script Master Data", key='script_criteria')
-if script_criteria:
-  if st.sidebar.button("Script Mastert Data", key="scriptmaster_data"):
-    conn4.request(
-    'GET',
-    f'/openapi/typea/instruments/scriptmaster',
-    headers=headers3)
-    response_script = conn4.getresponse()
-    st.write("HTTP hist status:", response_script.status)
-    st.write("HTTP hist reason:", response_script.reason)
-    result5 = response_script.read().decode("utf-8")
-    #st.write (result5)
-
-#======================================================
-                    # OHLC
-#====================================================== 
-ohlc_criteria=st.sidebar.checkbox("OHLC Data", key='ohlc_criteria')
-if ohlc_criteria:
-  exchange_str1 = st.sidebar.selectbox("Exchange", key='exchange1', options=['NSE','NFO','BSE','BFO'], index=0)
-  symboleq = st.sidebar.text_input("Trading Symbol for Equity", key='sybmol', value='ACC-EQ', help='if using NFO:- NIFTY2681224350CE')
-  if st.sidebar.button("OHLC Data", key="ohlc_data"):
-    params = {
-        'i':
-            f'{exchange_str1}:{symboleq}'
-    }
-    st.write(params)
-    response_ohlc = requests.get('https://api.mstock.trade/openapi/typea/instruments/quote/ohlc', params=params, headers=headers3)
-    st.write("HTTP hist status:", response_ohlc.status_code)
-    st.write("HTTP hist reason:", response_ohlc.reason)
-    if response_ohlc == response_ohlc.json():
-      st.json(response_ohlc)
-    else:
-      st.json(response_ohlc.text)
-      
-  # ============================================================
-# OPTION CHAIN MASTER  CALL / PUT Data
-# ============================================================
-
-conn2 = http.client.HTTPSConnection('api.mstock.trade')
-call_criteria=st.sidebar.checkbox("Contract Master Data", key='call_criteria')
-if call_criteria:
-  strike1=st.sidebar.number_input("select first strike", 21000, 28000, 23500, 50, key='strike1')
-  strike2=st.sidebar.number_input("select second strike", 21000, 28000, 24500, 50, key='strike2')
-  expiry= st.sidebar.selectbox("Epoch", key='expiry', options=epoch_list, index=6)
-  token1=st.sidebar.number_input("select token", value=26000, key='token1')
-  callmaster=st.sidebar.button("Get Contract Master CE/PE", key='callmaster')
-  if callmaster:
-    conn2.request(
-    'GET',
-    f'/openapi/typea/GetOptionChain/2/{expiry}/{token1}',
-    headers=headers3)
-    response101 = conn2.getresponse()
-    st.write("HTTP reason:", response101.reason)
-    st.write("HTTP status:", response101.status)
-    result3 = response101.read().decode("utf-8")
-    data3= json.loads(result3)
-    with st.expander("See json response"):
-      st.json(data3)
-    expiry = data3["data"]["contractModel"]['exp']
-    call_data= data3["data"]["call"]
-    put_data= data3["data"]["put"]
-    call_rows = parse_option_data(call_data)
-    put_rows = parse_option_data(put_data)
-    calldf = pd.DataFrame(call_rows, columns=['CE.token','CE.strike','CE.OI','CE.ChngOI']).fillna(0, inplace=True)
-    calldf = calldf.astype('int64')
-    calldf['CE.strike'] =calldf['CE.strike']/100
-    calldf_refined = calldf[calldf['CE.strike'].between(strike1, strike2)]
-    calldf_refined['CE.expiry'] = expiry
-    putdf = pd.DataFrame(put_rows, columns=['PE.token','PE.strike','PE.OI','PE.ChngOI']).fillna(0, inplace=True)
-    putdf = putdf.astype('int64')
-    putdf['PE.strike'] = putdf['PE.strike']/100
-    putdf_refined = putdf[putdf['PE.strike'].between(strike1, strike2)]
-    putdf_refined['PE.expiry'] = expiry
-    option_chain =pd.concat([calldf_refined,putdf_refined], axis=1, ignore_index=False)
-    st.dataframe(option_chain, column_order=['CE.token','CE.OI','CE.ChngOI','CE.strike','PE.ChngOI','PE.OI','PE.token', 'CE.expiry'])
-    st.write(calldf_refined)
-   
-    exp_list= []
-    for item in epoch_list:
-      response103=requests.get('https://api.mstock.trade'
-      f'/openapi/typea/GetOptionChain/2/{item}/26000',
-      headers=headers3)
-      if response103== response103.json():
-        exp1=response103["data"]["contractModel"]["exp"]
-        exp_list.append(str(exp1))
-        st.write("need to be printed", exp_list)
-        
 #==================================================================================================
                                           # master button
 #===================================================================================================
@@ -378,18 +261,13 @@ IDdf = pd.DataFrame(merged_ID)
 future = expiry['data']['FUTIDX']
 future_ID = parse_option_data1(future)
 
-st.write("future_ID", future_ID)
-future_df = future_ID[0][2:]
+st.write("future_DF", future_ID)
 
-st.write("future_DF", future_df)
-
-
-  
 #------------------------below calculation is only for getting Nifty symbol token to get Intraday data of individual strikes---------------------
 
 expiry_epoch = st.selectbox("Select Expiry", options = list_epoch, index=7, key='outexp')
 response1 = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{expiry_epoch}/26000", headers=headers3)
-st.write("status", response1.status_code)
+#st.write("status", response1.status_code)
 result101 = response1.json()
 expiry101 = result101["data"]["contractModel"]["exp"]
 st.write(expiry101)
