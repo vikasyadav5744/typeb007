@@ -384,8 +384,6 @@ future_df = future_ID[0][2:]
 st.write("future_DF", future_df)
 
 
-
-
   
 #------------------------below calculation is only for getting Nifty symbol token to get Intraday data of individual strikes---------------------
 
@@ -407,17 +405,14 @@ Nifty_round = round(spot2['data']['candles'][0][3], -2)
 Nifty_round_lower = round(spot2['data']['candles'][0][3], -2)- 800
 Nifty_round_upper = round(spot2['data']['candles'][0][3], -2) + 800
 
-
-
 st.write("Spot Nifty Intraday", Time, Nifty_Close, Nifty_round)
-
 
 #---------------------------dataframe call /put data---------------------------------------------------------------------------- 
 
-strike1_d=st.number_input("select first strike", value= Nifty_round_lower, key='strike1_d')
-strike2_d=st.number_input("select second strike", value= Nifty_round_upper, key='strike2_d')
-call_data_d= result101["data"]["call"]
-put_data_d= result101["data"]["put"]
+strike1_d =st.number_input("select first strike", value= Nifty_round_lower, key='strike1_d')
+strike2_d =st.number_input("select second strike", value= Nifty_round_upper, key='strike2_d')
+call_data_d = result101["data"]["call"]
+put_data_d = result101["data"]["put"]
 call_rows_d = parse_option_data(call_data_d)
 put_rows_d = parse_option_data(put_data_d)
 calldf_d = pd.DataFrame(call_rows_d, columns=['CE.token','CE.strike','CE.OI','CE.volume']).fillna(0, inplace=True)
@@ -524,6 +519,9 @@ def get_option_ind(token, para):
             'type'
         ]
     )
-red = get_option_ind(ce_token, "CE")
+CE_details = get_option_ind(ce_token, "CE")
+PE_details = get_option_ind(pe_token, "PE")
 
-st.dataframe(red)
+st.dataframe(CE_Details)
+
+st.dataframe(PE_Details)
