@@ -274,6 +274,8 @@ st.write(expiry101)
 st.write(contract)
 
 st.write(list_epoch[0])
+list_epoch=list_epoch.pop(0)
+st.write(list_epoch)
 month_exp=[]
 for i in list_epoch:
   exp = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{i}/26000", headers=headers3)
