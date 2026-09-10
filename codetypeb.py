@@ -269,6 +269,7 @@ response1 = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{expiry_epoch}/2
 #st.write("status", response1.status_code)
 result101 = response1.json()
 expiry101 = result101["data"]["contractModel"]["exp"]
+st.write(expiry101)
 try: 
   expiry_month = []
   for i in list_epoch:
