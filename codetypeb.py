@@ -283,8 +283,6 @@ try:
             expiry_month.append(expiry_03)
         else:
           st.write("API error:", expiry_02)
-      else:
-        st.write(f"HTTP Error {expiry01.status_code} for epoch {i}")
 except Exception as e:
     st.write("Error:", e)
 
