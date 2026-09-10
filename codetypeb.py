@@ -414,8 +414,8 @@ st.write("Spot Nifty Intraday", Time, Nifty_Close, Nifty_round)
 
 #---------------------------dataframe call /put data---------------------------------------------------------------------------- 
 
-strike1_d=st.number_input("select first strike", 21000, 28000, Nifty_round_lower, 50, key='strike1_d')
-strike2_d=st.number_input("select second strike", 21000, 28000, Nifty_round_upper, 50, key='strike2_d')
+strike1_d=st.number_input("select first strike", value= Nifty_round_lower, key='strike1_d')
+strike2_d=st.number_input("select second strike", value= Nifty_round_upper, key='strike2_d')
 call_data_d= result101["data"]["call"]
 put_data_d= result101["data"]["put"]
 call_rows_d = parse_option_data(call_data_d)
