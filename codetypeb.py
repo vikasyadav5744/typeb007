@@ -273,6 +273,29 @@ contract = result101["data"]["contractModel"]
 st.write(expiry101)
 st.write(contract)
 
+st.write(list_epoch)
+month_exp=[]
+for i in list_epoch:
+  exp = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{expiry_epoch[i]}/26000", headers=headers3)
+  if exp.status_code==200:  
+    result101 = exp.json()
+    exp101 = result101["data"]["contractModel"]["exp"]
+    month_exp.append(exp101)
+  else:
+    st.write("Not Found")
+
+st.write("Expiry Details", month_exp)
+
+
+
+
+
+
+
+
+
+
+
 #--------------------------------------------------------get spot price-----------------------------
 
 spot = requests.get(f'{url}/openapi/typea/instruments/intraday/1/26000/minute', headers=headers3)
