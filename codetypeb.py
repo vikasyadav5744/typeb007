@@ -261,8 +261,6 @@ IDdf = pd.DataFrame(merged_ID)
 future = expiry['data']['FUTIDX']
 future_ID = parse_option_data1(future)
 
-st.write("future_DF", future_ID)
-
 #------------------------below calculation is only for getting Nifty symbol token to get Intraday data of individual strikes---------------------
 
 expiry_epoch = st.selectbox("Select Expiry", options = list_epoch, index=7, key='outexp')
@@ -270,7 +268,19 @@ response1 = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{expiry_epoch}/2
 #st.write("status", response1.status_code)
 result101 = response1.json()
 expiry101 = result101["data"]["contractModel"]["exp"]
-st.write(expiry101)
+try 
+  expiry_month = []
+  for i in list_epoch:
+    expiry01 = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{expiry_epoch}/26000", headers=headers3)
+    if expiry01.status_code == 200:
+      expiry_02 = expiry01.json()
+      expiry_03 = expiry_02["data"]["contractModel"]["exp"]
+      expiry_month.append(expiry_03)
+    return expiry_month
+except exception as e:
+  st.write(e)
+
+st.write(expiry_month)
 #--------------------------------------------------------get spot price-----------------------------
 
 spot = requests.get(f'{url}/openapi/typea/instruments/intraday/1/26000/minute', headers=headers3)
