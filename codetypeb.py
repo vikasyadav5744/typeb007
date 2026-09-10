@@ -277,7 +277,7 @@ st.write(list_epoch[0])
 month_exp=[]
 for i in list_epoch:
   exp = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{i}/26000", headers=headers3)
-  if exp.status_code==200:  
+  if exp.status_code==200 & exp['data']!='NULL':  
     result101 = exp.json()
     st.write(result101)
   else:
