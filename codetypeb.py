@@ -279,7 +279,7 @@ try:
       expiry_month.append(expiry_03)
 except exception as e:
   st.write(e)
-
+st.write(list_epoch)
 st.write(expiry_month)
 #--------------------------------------------------------get spot price-----------------------------
 
