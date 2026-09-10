@@ -423,11 +423,11 @@ def get_option_ind(token, para):
 CE_details = get_option_ind(ce_token, "CE").rename({
             'Open':'CE_Open',
             'High':'CE_High',
-            'Low',
-            'Close',
-            'Volume',
-            'token',
-            'type'
+            'Low':'CE_Low',
+            'Close':'CE_Close',
+            'Volume':'CE_Volume',
+            'token':'CE_Token'})
+            
 PE_details = get_option_ind(pe_token, "PE")
 
 st.write(PE_details)
