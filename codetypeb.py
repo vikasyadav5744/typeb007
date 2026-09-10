@@ -280,7 +280,7 @@ for i in list_epoch:
   exp = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{i}/26000", headers=headers3)
   if exp.status_code==200:  
     result101 = exp.json()
-    exp1 = result101["data"]
+    exp1 = result101["data"]["contractModel"]
     month_exp.append(exp1)
     st.write(result101)
   else:
