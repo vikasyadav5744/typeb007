@@ -269,7 +269,9 @@ response1 = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{expiry_epoch}/2
 #st.write("status", response1.status_code)
 result101 = response1.json()
 expiry101 = result101["data"]["contractModel"]["exp"]
+contract = result101["data"]["contractModel"]
 st.write(expiry101)
+st.write(contract)
 
 #--------------------------------------------------------get spot price-----------------------------
 
