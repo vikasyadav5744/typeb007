@@ -375,21 +375,6 @@ merged_ID={"expiry_ID":expiry_ID, "expiry_epoch":expiry_epoch}
 
 IDdf = pd.DataFrame(merged_ID)
 
-
-def make_ID(data):
-  i=0
-  for i in data:
-    df = pd.DataFrame()
-    symbol = data[i][0]
-    token = data[i][1]
-    ID =data[i][2:]
-    len_ID = len(ID)
-    sym = symbol *len_ID
-    tkn = token *len_ID
-    df1 = pd.DataFrame({"sym" : sym, "token":tkn, "exp_ID":ID})
-    i+=1
-  return df                                                                              # not working 
-  
 future = expiry['data']['FUTIDX']
 future_ID = parse_option_data1(future)
 
@@ -410,6 +395,14 @@ st.write("status", response1.status_code)
 result101 = response1.json()
 expiry101 = result101["data"]["contractModel"]["exp"]
 st.write(expiry101)
+#--------------------------------------------------------get spot price-----------------------------
+
+spot = requests.get(f'{url}/openapi/typea/instruments/intraday/2/{token}/minute', headers=headers3)
+st.write("Spot", spot.status_code)
+spot1 = spot.text
+spot2 = json.loads(spot1)
+st.write("Spot Nifty Intraday", spot2)
+
 
 #---------------------------dataframe call /put data---------------------------------------------------------------------------- 
 
@@ -440,6 +433,7 @@ ce_token = calldf_d['CE.token']
 pe_token = putdf_d['PE.token']
 
 #------------------------------------------------getting intraday data------------------------------------------
+
 token=st.number_input("F&O token No.", value=74068, key='f&o') 
 response9 = requests.get(f'{url}/openapi/typea/instruments/intraday/2/{token}/minute', headers=headers3)
 st.write("Intra", response9.status_code)
