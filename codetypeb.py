@@ -274,7 +274,7 @@ st.write(expiry101)
 st.write(contract)
 
 st.write(list_epoch[0])
-list_epoch=list_epoch.pop(0)
+list_epoch=list_epoch.pop([0])
 st.write(list_epoch)
 month_exp=[]
 for i in list_epoch:
