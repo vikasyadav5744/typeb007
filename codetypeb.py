@@ -376,6 +376,8 @@ def get_option_ind(token, para):
       
         result_df01 ['token'] = tkn
         result_df01 ['type'] = para
+        result_df01['Date'] = result_df01['Timestamp'].dt.date
+        result_df01['Time'] = result_df01['Timestamp'].dt.strftime('%H:%M')
       
         # Convert only numeric columns
         numeric_cols = [
@@ -404,6 +406,8 @@ def get_option_ind(token, para):
     return pd.DataFrame(
         columns=[
             'Timestamp',
+            'Date',
+            'Time',
             'Open',
             'High',
             'Low',
