@@ -426,7 +426,8 @@ CE_details = get_option_ind(ce_token, "CE").rename({
             'Low':'CE_Low',
             'Close':'CE_Close',
             'Volume':'CE_Volume',
-            'token':'CE_Token'})
+            'token':'CE_Token'}
+            )
             
 PE_details = get_option_ind(pe_token, "PE")
 
