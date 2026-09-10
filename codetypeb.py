@@ -332,14 +332,6 @@ pe_token = putdf_refined_d['PE.token']
 
 #------------------------------------------------getting intraday data------------------------------------------
 
-token=st.number_input("F&O token No.", value=74068, key='f&o') 
-response9 = requests.get(f'{url}/openapi/typea/instruments/intraday/2/{token}/minute', headers=headers3)
-st.write("Intra", response9.status_code)
-data12 = response9.text
-data12 = json.loads(data12)
-result01=data12["data"]["candles"]
-result_df01 = pd.DataFrame(result01, columns =['Timestamp', 'Open', 'High', 'Low', 'Close', 'Volume'])
-
 def get_option_ind(token, para):
 
     option_data = []
