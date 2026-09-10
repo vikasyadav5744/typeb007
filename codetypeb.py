@@ -424,7 +424,7 @@ CE_details = get_option_ind(ce_token, "CE")
             
 PE_details = get_option_ind(pe_token, "PE")
 
-CE_details = CE_details..rename({
+CE_details = CE_details.rename({
             'Open':'CE_Open',
             'High':'CE_High',
             'Low':'CE_Low',
@@ -433,7 +433,7 @@ CE_details = CE_details..rename({
             'token':'CE_Token'},
             )
 
-PE_details = PE_details..rename({
+PE_details = PE_details.rename({
             'Open':'PE_Open',
             'High':'PE_High',
             'Low':'PE_Low',
