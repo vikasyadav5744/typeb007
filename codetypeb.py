@@ -276,7 +276,7 @@ try:
       expiry_02 = expiry01.json()
       expiry_03 = expiry_02["data"]["contractModel"]["exp"]
       expiry_month.append(expiry_03)
-    return expiry_month
+      return expiry_month
 except exception as e:
   st.write(e)
 
