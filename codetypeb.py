@@ -433,5 +433,13 @@ CE_details = CE_details..rename({
             'token':'CE_Token'},
             )
 
+PE_details = PE_details..rename({
+            'Open':'PE_Open',
+            'High':'PE_High',
+            'Low':'PE_Low',
+            'Close':'PE_Close',
+            'Volume':'PE_Volume',
+            'token':'PE_Token'},
+            )
 st.write(PE_details)
 st.write(CE_details)
