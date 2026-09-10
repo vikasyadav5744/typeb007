@@ -271,15 +271,34 @@ result101 = response1.json()
 expiry101 = result101["data"]["contractModel"]["exp"]
 st.write(expiry101)
 expiry_month = []
-try: 
-  for i in list_epoch:
-    expiry01 = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{expiry_epoch}/26000", headers=headers3)
-    if expiry01.status_code == 200:
-      expiry_02 = expiry01.json()
-      expiry_03 = expiry_02["data"]["contractModel"]["exp"]
-      expiry_month.append(expiry_03)
-except exception as e:
-  st.write(e)
+try:
+    for i in list_epoch:
+
+        expiry01 = requests.get(
+            f"{url}/openapi/typea/GetOptionChain/2/{i}/26000",
+            headers=headers3
+        )
+
+        if expiry01.status_code == 200:
+
+            expiry_02 = expiry01.json()
+
+            if expiry_02.get("status") == "success":
+
+                expiry_03 = expiry_02["data"]["contractModel"]["exp"]
+
+                expiry_month.append(expiry_03)
+
+            else:
+                st.write("API error:", expiry_02)
+
+        else:
+            st.write(
+                f"HTTP Error {expiry01.status_code} for epoch {i}"
+            )
+
+except Exception as e:
+    st.write("Error:", e)
 st.write(list_epoch)
 st.write(expiry_month)
 #--------------------------------------------------------get spot price-----------------------------
