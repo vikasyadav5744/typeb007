@@ -524,8 +524,7 @@ def get_option_ind(token, para):
         ]
     )
 CE_details = get_option_ind(ce_token, "CE")
-#PE_details = get_option_ind(pe_token, "PE")
+PE_details = get_option_ind(pe_token, "PE")
 
-st.dataframe(CE_Details)
-
-#st.dataframe(PE_Details)
+st.write(PE_details)
+st.write(CE_details)
