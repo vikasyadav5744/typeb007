@@ -237,7 +237,7 @@ if hist_criteria:
     st.write("HTTP hist reason:", response_hist.reason)
     result4 = response_hist.read().decode("utf-8")
     data4= json.loads(result4)
-    data4 = data4["data"]["candles"][""""]
+    data4 = data4["data"]["candles"]
     st.write(data4)
 #==================================================================================================
                                           # master button
