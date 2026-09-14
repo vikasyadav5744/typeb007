@@ -241,7 +241,7 @@ if hist_criteria:
 #==================================================================================================
                                           # master button
 #===================================================================================================
-if st.button("Press to get live data"):
+if st.checkbox("Press to get live data"):
   url = 'https://api.mstock.trade'
   response = requests.get(f"{url}/openapi/typea/getoptionchainmaster/2", headers=headers3)
   expiry = response.json()
