@@ -241,6 +241,7 @@ if hist_criteria:
 #==================================================================================================
                                           # master button
 #===================================================================================================
+
 url = 'https://api.mstock.trade'
 response = requests.get(f"{url}/openapi/typea/getoptionchainmaster/2", headers=headers3)
 expiry = response.json()
@@ -438,3 +439,5 @@ PE_details1 = PE_details.rename(columns={
             'Volume':'PE_Volume',
             'token':'PE_Token'},
             )
+
+
