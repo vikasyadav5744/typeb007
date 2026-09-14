@@ -11,6 +11,36 @@ st.write("Current public IP:", my_ip)
 
 #_--------++++----------------------
 
+#===============================================================highligh second Highest======================
+
+def highlight_second_highest(s):
+  max_val = s.max()
+  second_highest = s.nlargest(2).iloc[-1]  # get second largest value
+  threshold = 0.75 * max_val
+  threshold1 = 0.90 * max_val
+  threshold2 = 0.80 * max_val
+  
+  def color_val(val):
+    if val > threshold1 and val == second_highest:
+      return 'background-color: #8c8418; color:black'
+    elif val > threshold2 and val == second_highest:
+      return 'background-color:  #e3e086; color:black'
+    elif val > threshold and val == second_highest:
+      return 'background-color:lightyellow;color:black'
+    elif val == max_val:
+      return 'background-color: green; color:black'
+    else:
+      return 'background-color:#e1e5e6; color:black'     
+  return s.apply(color_val)
+
+#============================================================Strike _color ==========================================================
+def color_two(val, props='background-color:orange; color:black'):
+  return props if val >0 else ''
+
+def color_all(val, props='background-color:#ceeded; color:black'):
+  return props if val >0 else props
+
+#=====================================================================================================================================
 def parse_option_data(option_data):
   rows = []
   for item in option_data:
@@ -241,7 +271,8 @@ if hist_criteria:
     data_df01 = pd.DataFrame(data4,columns=['Timestamp','Open','High','Low','Close','Volume'])
     data_df01['Timestamp'] = pd.to_datetime(data_df01['Timestamp'],errors='coerce')
     data_df01['Time'] = data_df01['Timestamp'].dt.strftime('%H:%M')
-    st.dataframe(data_df01)
+    data_df02 = data_df01.style.apply(highligh_second_highest, subset=['Open','High']).map(color_all, subset=['Volume']
+    st.dataframe(data_df02)
 #==================================================================================================
                                           # master button
 #===================================================================================================
