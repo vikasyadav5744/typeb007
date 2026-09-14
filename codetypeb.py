@@ -238,7 +238,7 @@ if hist_criteria:
     result4 = response_hist.read().decode("utf-8")
     data4= json.loads(result4)
     data4 = data4["data"]["candles"]
-    st.write(data4)
+    st.dataframe(data4)
 #==================================================================================================
                                           # master button
 #===================================================================================================
