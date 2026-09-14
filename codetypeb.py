@@ -238,7 +238,7 @@ if hist_criteria:
     result4 = response_hist.read().decode("utf-8")
     data4= json.loads(result4)
     data4 = data4["data"]["candles"]
-    data_df01 = pd.DataFrame(data4,columns=['Timestamp','Open','High','Low','Close','Volume']
+    data_df01 = pd.DataFrame(data4,columns=['Timestamp','Open','High','Low','Close','Volume'])
     st.dataframe(data_df01)
 #==================================================================================================
                                           # master button
