@@ -221,11 +221,11 @@ if Intraday_criteria==True:
 conn3 = http.client.HTTPSConnection('api.mstock.trade')
 hist_criteria=st.sidebar.checkbox("Historical Data", key='hist_criteria')
 if hist_criteria:
-  exchange_str= st.sidebar.selectbox("Exchane", key='exchange', options=['NSE','NFO','BSE','BFO'], index=0)
+  exchange_str= st.sidebar.selectbox("Exchane", key='exchange', options=['NSE','NFO','BSE','BFO'], index=1)
   inst_token=int(st.sidebar.number_input("Instrument Token", key='instrument', value=74068))
   interval_hist= st.sidebar.selectbox("Choose Interval", key="interval_hist", options=['minute','5minute','10minute', '15minute', '30minute', '60minute', 'day'])
-  fromdate = st.sidebar.date_input("Choose From Date", format="YYYY-MM-DD", key='fromdate')
-  todate = st.sidebar.date_input("Choose To Date", format="YYYY-MM-DD", key='todate')
+  fromdate = st.sidebar.date_input("Choose From Date", value="2026-09-10", format="YYYY-MM-DD", key='fromdate')
+  todate = st.sidebar.date_input("Choose To Date", value="2026-09-11", format="YYYY-MM-DD", key='todate')
   
   if st.sidebar.button("Historical Data", key="historical_data"):
     conn3.request(
