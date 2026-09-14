@@ -285,7 +285,7 @@ if st.button("Press to get live data"):
    # st.write("Not Found")
 
 #--------------------------------------------------------get spot price-----------------------------
-
+url = 'https://api.mstock.trade'
 spot = requests.get(f'{url}/openapi/typea/instruments/intraday/1/26000/minute', headers=headers3)
 st.write("Spot", spot.status_code)
 spot1 = spot.text
