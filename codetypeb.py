@@ -241,45 +241,45 @@ if hist_criteria:
 #==================================================================================================
                                           # master button
 #===================================================================================================
-
-url = 'https://api.mstock.trade'
-response = requests.get(f"{url}/openapi/typea/getoptionchainmaster/2", headers=headers3)
-expiry = response.json()
-st.write(response.status_code)
-expiry_ids = expiry['data']['dctExp']                       # dictionary of key:value
-list_epoch = list(expiry_ids.values())                       #list of epoch
-epoch_len =len(list_epoch)
-with st.expander (" serial no.7 is 1st-Sep-2026 expiry"):
-  st.write(list_epoch)
-
-master_chain = pd.DataFrame(expiry)
-
-expiry_ID = list(expiry['data']['dctExp'].keys())
-expiry_epoch = list(expiry['data']['dctExp'].values())
-merged_ID={"expiry_ID":expiry_ID, "expiry_epoch":expiry_epoch}
-
-IDdf = pd.DataFrame(merged_ID)
-
-future = expiry['data']['FUTIDX']
-future_ID = parse_option_data1(future)
-
-#------------------------below calculation is only for getting Nifty symbol token to get Intraday data of individual strikes---------------------
-
-expiry_epoch = st.selectbox("Select Expiry", options = list_epoch, index=7, key='outexp')
-response1 = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{expiry_epoch}/26000", headers=headers3)
-#st.write("status", response1.status_code)
-result101 = response1.json()
-expiry101 = result101["data"]["contractModel"]["exp"]
-contract = result101["data"]["contractModel"]
-
-#st.write(list_epoch)
-
-#month_exp=[]
-#for i in list_epoch:
- # exp = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{i}/26000", headers=headers3)
-  #if exp.status_code==200:  
-   # result101 = exp.json()
-    #exp1 = result101["data"]["contractModel"]
+if st.button("Press to get live data"):
+  url = 'https://api.mstock.trade'
+  response = requests.get(f"{url}/openapi/typea/getoptionchainmaster/2", headers=headers3)
+  expiry = response.json()
+  st.write(response.status_code)
+  expiry_ids = expiry['data']['dctExp']                       # dictionary of key:value
+  list_epoch = list(expiry_ids.values())                       #list of epoch
+  epoch_len =len(list_epoch)
+  with st.expander (" serial no.7 is 1st-Sep-2026 expiry"):
+    st.write(list_epoch)
+  
+  master_chain = pd.DataFrame(expiry)
+  
+  expiry_ID = list(expiry['data']['dctExp'].keys())
+  expiry_epoch = list(expiry['data']['dctExp'].values())
+  merged_ID={"expiry_ID":expiry_ID, "expiry_epoch":expiry_epoch}
+  
+  IDdf = pd.DataFrame(merged_ID)
+  
+  future = expiry['data']['FUTIDX']
+  future_ID = parse_option_data1(future)
+  
+  #------------------------below calculation is only for getting Nifty symbol token to get Intraday data of individual strikes---------------------
+  
+  expiry_epoch = st.selectbox("Select Expiry", options = list_epoch, index=7, key='outexp')
+  response1 = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{expiry_epoch}/26000", headers=headers3)
+  #st.write("status", response1.status_code)
+  result101 = response1.json()
+  expiry101 = result101["data"]["contractModel"]["exp"]
+  contract = result101["data"]["contractModel"]
+  
+  #st.write(list_epoch)
+  
+  #month_exp=[]
+  #for i in list_epoch:
+   # exp = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{i}/26000", headers=headers3)
+    #if exp.status_code==200:  
+     # result101 = exp.json()
+      #exp1 = result101["data"]["contractModel"]
     #month_exp.append(exp1)
   #else:
    # st.write("Not Found")
