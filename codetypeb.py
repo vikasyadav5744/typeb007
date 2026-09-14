@@ -239,7 +239,7 @@ if hist_criteria:
     data4= json.loads(result4)
     data4 = data4["data"]["candles"]
     data_df01 = pd.DataFrame(data4,columns=['Timestamp','Open','High','Low','Close','Volume'])
-    data_df01['Timestamp'] = pd.to_datetime()
+    data_df01['Timestamp'] = pd.to_datetime(data_df01['Timestamp'],errors='coerce')
     data_df01['Time'] = data_df01['Timestamp'].dt.strftime('%H:%M')
     st.dataframe(data_df01)
 #==================================================================================================
