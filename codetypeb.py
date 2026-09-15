@@ -308,7 +308,6 @@ if st.checkbox("Press to get live data"):
   contract = result101["data"]["contractModel"]
   
   #st.write(list_epoch)
-  
   #month_exp=[]
   #for i in list_epoch:
    # exp = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{i}/26000", headers=headers3)
@@ -474,5 +473,6 @@ PE_details1 = PE_details.rename(columns={
             'Volume':'PE_Volume',
             'token':'PE_Token'},
             )
-
+merged_CE = pd.merge([calldf_refined_d, CE_details1], axis=1)
+st.write("Merged_CE:", merged_CE)
 
