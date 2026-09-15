@@ -306,17 +306,6 @@ if st.checkbox("Press to get live data"):
   result101 = response1.json()
   expiry101 = result101["data"]["contractModel"]["exp"]
   contract = result101["data"]["contractModel"]
-  
-  #st.write(list_epoch)
-  #month_exp=[]
-  #for i in list_epoch:
-   # exp = requests.get(f"{url}/openapi/typea/GetOptionChain/2/{i}/26000", headers=headers3)
-    #if exp.status_code==200:  
-     # result101 = exp.json()
-      #exp1 = result101["data"]["contractModel"]
-    #month_exp.append(exp1)
-  #else:
-   # st.write("Not Found")
 
 #--------------------------------------------------------get spot price-----------------------------
 url = 'https://api.mstock.trade'
@@ -324,7 +313,7 @@ spot = requests.get(f'{url}/openapi/typea/instruments/intraday/1/26000/minute', 
 st.write("Spot", spot.status_code)
 spot1 = spot.text
 spot2 = json.loads(spot1)
-st.write(spot2)
+#st.write(spot2)
 Time = spot2['data']['candles'][0][0]
 Nifty_Close = round(spot2['data']['candles'][0][3])
 Nifty_round = round(spot2['data']['candles'][0][3], -2)
@@ -357,7 +346,7 @@ putdf_d['PE.volume'] =putdf_d['PE.volume']/65
 putdf_refined_d = putdf_d[putdf_d['PE.strike'].between(strike1_d, strike2_d)]
 putdf_refined_d['PE.expiry'] = expiry101
 option_chain_d =pd.concat([calldf_refined_d,putdf_refined_d], axis=1, ignore_index=False)
-st.dataframe(option_chain_d, column_order=['CE_Token','CE.OI','CE.volume','CE.strike', 'PE.volume','PE.OI', 'PE_Token', 'CE.expiry'])
+#st.dataframe(option_chain_d, column_order=['CE_Token','CE.OI','CE.volume','CE.strike', 'PE.volume','PE.OI', 'PE_Token', 'CE.expiry'])
 
 #ce_token = calldf_d['CE.token']
 #pe_token = putdf_d['PE.token']
@@ -453,8 +442,8 @@ CE_details = get_option_ind(ce_token, "CE")
             
 PE_details = get_option_ind(pe_token, "PE")
 
-st.write(PE_details)
-st.write(CE_details)
+#st.write(PE_details)
+#st.write(CE_details)
 
 CE_details1 = CE_details.rename(columns={
             'Open':'CE_Open',
@@ -478,7 +467,7 @@ time_sel = st.selectbox("select Time", options = list_time, index=0, key='time_s
 CE_merged_details2 = CE_details1[CE_details1 ['Time']== time_sel]
 PE_merged_details2 = PE_details1[PE_details1 ['Time']== time_sel]
 
-st.write(CE_merged_details2, PE_merged_details2)
+#st.write(CE_merged_details2, PE_merged_details2)
 option_merged = option_chain_d.merge(PE_merged_details2, on ='PE_Token')
 option_merged_final = option_merged.merge(CE_merged_details2, on ='CE_Token')
 
