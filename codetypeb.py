@@ -484,8 +484,9 @@ option_merged_final = option_merged.merge(CE_merged_details2, on ='CE_Token')
 st.write(option_merged_final)
 st.write(list (option_merged_final.columns))
 
-show_option = option_merged_final[["Time_y","CE.OI", "PE.strike", "PE.OI"]]
-
+show_option = option_merged_final[["Time_y","CE.OI","CE.volume", "CE_Close", "PE.strike","PE_Close", "PE.OI","PE.volume", "CE.expiry"]]
 st.write(show_option)
+show_option1 = show_option.style.apply(highlight_second_highest, subset=['CE.OI','CE.volume', 'PE.OI', 'PE.volume']).format(precision=0).map(color_all, subset=['PE.strike']).map(color_two, subset=['CE_Close', 'PE_Close'])
+st.write(show_option1)
 
 
