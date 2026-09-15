@@ -476,6 +476,8 @@ PE_details1 = PE_details.rename(columns={
 list_time = CE_details1.Time.unique()
 time_sel = st.selectbox("select Time", options = list_time, index=0, key='time_sel')
 CE_details2 = CE_details1[CE_details1 ['Time']== time_sel]
-st.write(CE_details2)
+PE_details2 = PE_details1[PE_details1 ['Time']== time_sel]
+
+st.write(CE_details2, PE_details2)
 
 
