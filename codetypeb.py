@@ -484,5 +484,7 @@ option_merged_final = option_merged.merge(CE_merged_details2, on ='CE_Token')
 st.write(option_merged_final)
 st.write(list (option_merged_final.columns))
 
+show_optin = option_merged_final[["Time_y","CE.OI", "PE.strike", "PE.OI"]]
+
 
 
