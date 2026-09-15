@@ -473,7 +473,7 @@ PE_details1 = PE_details.rename(columns={
             'Volume':'PE_Volume',
             'token':'PE_Token'},
             )
-list_time = list(CE_details1.Time.unique())
+list_time = CE_details1.Time.unique()
 st.write(list_time)
 #CE_details2 = CE_Details1
 
