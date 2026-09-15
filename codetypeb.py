@@ -481,12 +481,9 @@ PE_merged_details2 = PE_details1[PE_details1 ['Time']== time_sel]
 st.write(CE_merged_details2, PE_merged_details2)
 option_merged = option_chain_d.merge(PE_merged_details2, on ='PE_Token')
 option_merged_final = option_merged.merge(CE_merged_details2, on ='CE_Token')
-st.write(option_merged_final)
-st.write(list (option_merged_final.columns))
 
 show_option = option_merged_final[["Time_y","CE.OI","CE.volume", "CE_Close", "PE.strike","PE_Close", "PE.OI","PE.volume", "CE.expiry"]]
-st.write(show_option)
-show_option1 = show_option.style.apply(highlight_second_highest, subset=['CE.OI','CE.volume', 'PE.OI', 'PE.volume']).format(precision=0).map(color_all, subset=['CE_Close', 'PE_Close']).format(precision=2).map(color_two, subset=['PE.strike'])
+show_option1 = show_option.style.apply(highlight_second_highest, subset=['CE.OI','CE.volume', 'PE.OI', 'PE.volume']).format(precision=0).map(color_all, subset=['CE_Close', 'PE_Close']).format(precision=2).map(color_two, subset=['PE.strike']).format(precision=0)
 st.write(show_option1)
 
 
