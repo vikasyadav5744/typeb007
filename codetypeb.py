@@ -480,7 +480,8 @@ PE_merged_details2 = PE_details1[PE_details1 ['Time']== time_sel]
 
 st.write(CE_merged_details2, PE_merged_details2)
 option_merged = option_chain_d.merge(PE_merged_details2, on ='PE_Token')
-st.write(option_merged)
+option_merged_final = option_merged.merge(CE_merged_details2, on ='CE_Token')
+st.write(option_merged_final)
 
 
 
