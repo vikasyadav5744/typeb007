@@ -342,14 +342,14 @@ call_data_d = result101["data"]["call"]
 put_data_d = result101["data"]["put"]
 call_rows_d = parse_option_data(call_data_d)
 put_rows_d = parse_option_data(put_data_d)
-calldf_d = pd.DataFrame(call_rows_d, columns=['CE.token','CE.strike','CE.OI','CE.volume']).fillna(0, inplace=True)
+calldf_d = pd.DataFrame(call_rows_d, columns=['CE_Token','CE.strike','CE.OI','CE.volume']).fillna(0, inplace=True)
 calldf_d = calldf_d.astype('int64')
 calldf_d['CE.strike'] =calldf_d['CE.strike']/100
 calldf_d['CE.OI'] =calldf_d['CE.OI']/65
 calldf_d['CE.volume'] =calldf_d['CE.volume']/65
 calldf_refined_d = calldf_d[calldf_d['CE.strike'].between(strike1_d, strike2_d)]
 calldf_refined_d['CE.expiry'] = expiry101
-putdf_d = pd.DataFrame(put_rows_d, columns=['PE.token','PE.strike','PE.OI','PE.volume']).fillna(0, inplace=True)
+putdf_d = pd.DataFrame(put_rows_d, columns=['PE_Token','PE.strike','PE.OI','PE.volume']).fillna(0, inplace=True)
 putdf_d = putdf_d.astype('int64')
 putdf_d['PE.strike'] = putdf_d['PE.strike']/100
 putdf_d['PE.OI'] =putdf_d['PE.OI']/65
@@ -357,13 +357,13 @@ putdf_d['PE.volume'] =putdf_d['PE.volume']/65
 putdf_refined_d = putdf_d[putdf_d['PE.strike'].between(strike1_d, strike2_d)]
 putdf_refined_d['PE.expiry'] = expiry101
 option_chain_d =pd.concat([calldf_refined_d,putdf_refined_d], axis=1, ignore_index=False)
-st.dataframe(option_chain_d, column_order=['CE.token','CE.OI','CE.volume','CE.strike', 'PE.volume','PE.OI', 'PE.token', 'CE.expiry'])
+st.dataframe(option_chain_d, column_order=['CE_Token','CE.OI','CE.volume','CE.strike', 'PE.volume','PE.OI', 'PE_Token', 'CE.expiry'])
 
 #ce_token = calldf_d['CE.token']
 #pe_token = putdf_d['PE.token']
 
-ce_token = calldf_refined_d['CE.token']
-pe_token = putdf_refined_d['PE.token']
+ce_token = calldf_refined_d['CE_Token']
+pe_token = putdf_refined_d['PE_Token']
 
 
 #------------------------------------------------getting intraday data------------------------------------------
@@ -479,7 +479,7 @@ CE_merged_details2 = CE_details1[CE_details1 ['Time']== time_sel]
 PE_merged_details2 = PE_details1[PE_details1 ['Time']== time_sel]
 
 st.write(CE_merged_details2, PE_merged_details2)
-option_merged = pd.merge([option_chain_d,CE_merged_details2, PE_merged_details2])
+option_merged = pd.merge([option_chain_d, PE_merged_details2], on ='PE_Token')
 st.write(option_merged)
 
 
