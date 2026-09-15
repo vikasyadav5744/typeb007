@@ -473,6 +473,8 @@ PE_details1 = PE_details.rename(columns={
             'Volume':'PE_Volume',
             'token':'PE_Token'},
             )
-merged_CE = pd.merge([calldf_refined_d, CE_details1], axis=1)
-st.write("Merged_CE:", merged_CE)
+list_time = list(CE_details1.Time.unique())
+st.write(list_time)
+#CE_details2 = CE_Details1
+
 
