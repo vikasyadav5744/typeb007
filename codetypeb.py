@@ -486,5 +486,6 @@ st.write(list (option_merged_final.columns))
 
 show_optin = option_merged_final[["Time_y","CE.OI", "PE.strike", "PE.OI"]]
 
+st.write(show_option)
 
 
