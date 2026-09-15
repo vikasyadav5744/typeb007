@@ -475,9 +475,12 @@ PE_details1 = PE_details.rename(columns={
             )
 list_time = CE_details1.Time.unique()
 time_sel = st.selectbox("select Time", options = list_time, index=0, key='time_sel')
-CE_details2 = CE_details1[CE_details1 ['Time']== time_sel]
-PE_details2 = PE_details1[PE_details1 ['Time']== time_sel]
+CE_merged_details2 = CE_details1[CE_details1 ['Time']== time_sel]
+PE_merged_details2 = PE_details1[PE_details1 ['Time']== time_sel]
 
-st.write(CE_details2, PE_details2)
+st.write(CE_merged_details2, PE_merged_details2)
+option_merged = pd.merge([option_chain_d,CE_merged_details2, PE_merged_details2])
+st.write(option_merged)
+
 
 
